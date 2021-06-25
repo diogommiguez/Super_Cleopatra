@@ -74,7 +74,7 @@ const ofColor Ball::get_color(){
 //--------------------------------------------------------------
 void Ball::evolve(){
     //PEGAR NA BOLA
-    if (ofGetMousePressed() and distance(posx, posy, ofGetMouseX(), ofGetMouseY()) < radius or caught)
+    if (ofGetMousePressed() and (distance(posx, posy, ofGetMouseX(), ofGetMouseY()) < radius or caught))
     {
         posx = ofGetMouseX();
         posy = ofGetMouseY();
@@ -121,6 +121,8 @@ void ofApp::setup(){
     decay = 1500;
     
     ofSoundStreamSetup(2, 0); // 2 output channels (stereo), 0 input channels
+    ofSetCircleResolution(100);
+    
 }
 
 //--------------------------------------------------------------
@@ -162,6 +164,11 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofColor colorOne(0, 50, 255);
+   ofColor colorTwo(50, 0, 100);
+
+   ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_CIRCULAR);
+
     for(int i = 0; i<balls.size(); i++){
         ofSetColor(balls[i].get_color());
         ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
@@ -215,7 +222,7 @@ void ofApp::newBall(int xball, int yball){
     Ball myball;
     myball.set_posx(xball);
     myball.set_posy(yball);
-    myball.set_radius(ofRandom(20,30));
+    myball.set_radius(ofRandom(30,40));
     myball.set_color(ofRandom(0,255));
     
     balls.push_back(myball);
@@ -268,6 +275,6 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
