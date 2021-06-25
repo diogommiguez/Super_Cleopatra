@@ -67,6 +67,8 @@ const ofColor Ball::get_color(){
 
 //--------------------------------------------------------------
 void Ball::evolve(){
+    hit_note = false;
+
     double aux_x = posx;
     double aux_y = posy;
 
@@ -77,6 +79,7 @@ void Ball::evolve(){
     v_y= (posy-aux_y)/dt;
     
     if(posy >ofGetHeight()-radius && closed_floor ){
+            hit_note = true;
             posy = ofGetHeight()-radius;
             set_v_y(-get_v_y());
             getNote(get_posx());
@@ -92,12 +95,13 @@ void Ball::getNote(double xpos){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    nballs = 2;
-    for(int j =0;j<nballs;j++){
+    N = 2;
+    for(int j =0;j<N;j++){
         phase.push_back(0);
     }
-    attack = 500;
-    decay = 3000;
+    
+    attack = 300;
+    decay = 1500;
     
     ofSoundStreamSetup(2, 0); // 2 output channels (stereo), 0 input channels
 }
@@ -107,7 +111,7 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
     float sample;
     for(int i = 0; i < outBuffer.size(); i += 2) {
         sample=0;
-        for(int ball=0; ball < nballs ;ball++)
+        for(int ball=0; ball < N ;ball++)
         {
             sample += sin(0.5*(ball+1)*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
             phase[ball] += 0.05;
@@ -132,6 +136,9 @@ double ofApp::envelope(double phase){
 void ofApp::update(){
     double time = ofGetSystemTimeMillis()/1000.0;
     for(int i = 0; i<balls.size(); i++){
+        if(balls[i].hit_note==true){
+            phase[i] = 0;
+        }
         balls[i].evolve();
     }
 }

@@ -36,6 +36,7 @@ class Ball : public ofBaseApp{
         void evolve();
         void set_closed_floor(bool val) {closed_floor = val;};
         void getNote(double);
+        bool hit_note = false;
 };
 
 class ofApp : public ofBaseApp{
@@ -67,6 +68,6 @@ class ofApp : public ofBaseApp{
         vector<double> phase;
         double attack;
         double decay;
-        int nballs;
+        int N;
 		
 };
