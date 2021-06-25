@@ -7,6 +7,8 @@
 
 #include "ofMain.h"
 
+double distance(double x1, double y1, double x2, double y2);
+
 class Ball : public ofBaseApp{
         double posx;
         double posy;
@@ -19,6 +21,8 @@ class Ball : public ofBaseApp{
         int SAMPLE_RATE = 100;
         double dt = 1.0/SAMPLE_RATE;
         bool closed_floor = true;
+        int note=1;
+    bool caught = false;
     public:
         void set_posx(double);
         void move_x(double);
@@ -35,7 +39,7 @@ class Ball : public ofBaseApp{
         const double get_v_y();
         void evolve();
         void set_closed_floor(bool val) {closed_floor = val;};
-        void getNote(double);
+        int getNote();
         bool hit_note = false;
 };
 

@@ -1,5 +1,11 @@
 #include "ofApp.h"
 
+// FUNÇÕES GERAIS
+double distance(double x1, double y1, double x2, double y2)
+{
+    return pow(pow(x1 - x2, 2) + pow(y1 - y2, 2),1/2.0);
+}
+
 //--------------------------------------------------------------
 void Ball::set_posx(double x){
     posx = x;
@@ -67,6 +73,15 @@ const ofColor Ball::get_color(){
 
 //--------------------------------------------------------------
 void Ball::evolve(){
+    //PEGAR NA BOLA
+    if (ofGetMousePressed() and distance(posx, posy, ofGetMouseX(), ofGetMouseY()) < radius or caught)
+    {
+        posx = ofGetMouseX();
+        posy = ofGetMouseY();
+        caught = true;
+    } else {
+      
+    caught = false;
     hit_note = false;
 
     double aux_x = posx;
@@ -78,19 +93,26 @@ void Ball::evolve(){
     v_x= (posx-aux_x)/dt;
     v_y= (posy-aux_y)/dt;
     
-    if(posy >ofGetHeight()-radius && closed_floor ){
+    if(posy >ofGetHeight()-radius-15 && closed_floor ){
             hit_note = true;
-            posy = ofGetHeight()-radius;
+            posy = ofGetHeight()-radius-15;
             set_v_y(-get_v_y());
-            getNote(get_posx());
+            note = posx*5/ofGetWidth()+1;
         }
-
+    // CONDIÇÕES FRONTEIRA
+    if(posx > ofGetWidth()){
+        posx -= ofGetWidth();
+    }
+    if(posx < 0){
+        posx += ofGetWidth();
+    }
+      
+    }
 }
 
 //--------------------------------------------------------------
-void Ball::getNote(double xpos){
-    int note = xpos*5/ofGetWidth()+1;
-    cout << "\n" << note << endl;
+int Ball::getNote(){
+    return note;
 }
 
 //--------------------------------------------------------------
@@ -108,7 +130,7 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
         sample=0;
         for(int ball=0; ball < N ;ball++)
         {
-            sample += sin(0.5*(1+ball/2.0)*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
+            sample += sin(balls[ball].getNote()*0.5*(1+ball/2.0)*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
             phase[ball] += 0.05;
         }
         //float sample = sin(phase[0]);//*envelope(phase[0]); // generating a sine wave sample
@@ -144,6 +166,10 @@ void ofApp::draw(){
         ofSetColor(balls[i].get_color());
         ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
     }
+    for(int i =0; i<15; i++){
+        ofSetColor(i*255/5, 100*(1+sin(i)), 255-i*255/5);
+        ofDrawRectangle(i*ofGetWidth()/5, ofGetHeight()-15, (i+1)*ofGetWidth()/5, ofGetHeight());
+    }
 }
 
 //--------------------------------------------------------------
@@ -175,11 +201,8 @@ void ofApp::keyPressed(int key){
         case 'o':
             open_floor();
             break;
-        case 'a':
-            phase[0]=0;
-            break;
         case 'b':
-            phase[1]=0;
+            newBall(ofGetMouseX(),ofGetMouseY());
             break;
 //        case 'c':
 //            phase[2]=0;
@@ -217,7 +240,6 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    newBall(ofGetMouseX(),ofGetMouseY());
 }
 
 //--------------------------------------------------------------
