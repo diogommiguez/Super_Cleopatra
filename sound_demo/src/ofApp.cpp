@@ -95,11 +95,6 @@ void Ball::getNote(double xpos){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    N = 2;
-    for(int j =0;j<N;j++){
-        phase.push_back(0);
-    }
-    
     attack = 300;
     decay = 1500;
     
@@ -113,7 +108,7 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
         sample=0;
         for(int ball=0; ball < N ;ball++)
         {
-            sample += sin(0.5*(ball+1)*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
+            sample += sin(0.5*(1+ball/2.0)*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
             phase[ball] += 0.05;
         }
         //float sample = sin(phase[0]);//*envelope(phase[0]); // generating a sine wave sample
@@ -201,6 +196,8 @@ void ofApp::newBall(int xball, int yball){
     myball.set_color(ofRandom(0,255));
     
     balls.push_back(myball);
+    N ++;
+    phase.push_back(attack+decay);
 }
 
 //--------------------------------------------------------------
