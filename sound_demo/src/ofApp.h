@@ -49,25 +49,33 @@ class slider : public ofBaseApp{
 };
 
 class Ball : public ofBaseApp{
+    // parametros da bola
         double posx;
         double posy;
-        int radius;
-        ofColor color;
-        double g = 5000;
-        double a = 1000;
         double v_y = 0;
         double v_x = 0;
+        int radius;
+        ofColor color;
+    // constantes físicas
+        double g = 5000;
+        double a = 1000;
+    // parametros da simulação
         int SAMPLE_RATE = 100;
         double dt = 1.0/SAMPLE_RATE;
-        bool closed_floor = true;
-        int note=1;
-        bool caught = false;
-        bool mouse_g = false;
+    // variaveis booleanas / flags
+        bool closed_floor = true; // chão está ou não a deixar passar as bolas
+        bool caught = false; // a bola atual encontra-se ou não "capturada" pelo rato
+        bool mouse_g = false; // a bola é graviticamente atraída ou não pelo rato
+    // parametros musicais
+        int note; // nota que vai tocar
+        int nnotes = 5; // numero de notas possíveis
+        //double notes[5] = {261.63,277.18,329.63,349.23,415.30}; // frequências em Hertz
+        double notes[5] = {349.23,392.00,415.30,493.88,523.25};
     public:
         void set_posx(double);
-        void move_x(double);
+        void move_x(double); // adiciona à posição x da bola
         void set_posy(double);
-        void move_y(double);
+        void move_y(double); // adiciona à posição y da bola
         void set_radius(int);
         void set_color(int);
         void set_v_y(double);

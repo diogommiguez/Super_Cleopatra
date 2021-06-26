@@ -192,7 +192,7 @@ void Ball::evolve(){
             hit_note = true;
             posy = ofGetHeight()-radius-15;
             set_v_y(-get_v_y());
-            note = posx*5/ofGetWidth()+1;
+            note = notes[(int)(posx*nnotes/ofGetWidth())];
         }
     // CONDIÇÕES FRONTEIRA
     if(posx > ofGetWidth()){
@@ -216,8 +216,8 @@ int Ball::getNote(){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    attack = 100;
-    decay = 100;
+    attack = 150;
+    decay = 200;
     
     ofSoundStreamSetup(2, 0); // 2 output channels (stereo), 0 input channels
     ofSetCircleResolution(100);
@@ -251,7 +251,11 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
         sample=0;
         for(int ball=0; ball < N ;ball++)
         {
-            sample += volume*sin(balls[ball].getNote()*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
+            sample += volume*( sin(balls[ball].getNote()*phase[ball]/512.0)
+                              +0.6*sin(balls[ball].getNote()*3*phase[ball]/512.0)
+                              +0.4*sin(balls[ball].getNote()*5*phase[ball]/512.0)
+                              +0.2*sin(balls[ball].getNote()*7*phase[ball]/512.0)
+                              )*envelope(phase[ball]); // generating a sine wave sample
             phase[ball] += 0.05;
         }
         //float sample = sin(phase[0]);//*envelope(phase[0]); // generating a sine wave sample
@@ -357,7 +361,7 @@ void ofApp::draw(){
 void ofApp::random_v(){
     for(int i = 0; i<balls.size(); i++){
         balls[i].set_v_x(ofRandom(-1000,1000));
-        balls[i].set_v_y(ofRandom(-3000,0));
+        balls[i].set_v_y(ofRandom(-2000,0));
     }
 }
 
