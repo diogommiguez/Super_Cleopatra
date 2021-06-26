@@ -24,10 +24,11 @@ class slider : public ofBaseApp{
     private:
         int  posx;
         int  posy;
+        int ticker_y;
         int  height = 100;
         int  width  = 20;
         int  value; // 0-100
-        bool selected;
+        bool selected; // Para continuar selecionado quando saimos das fronteiras do slider
     public:
         void setup(int, int);
         void run();
@@ -45,6 +46,8 @@ class ofApp : public ofBaseApp{
         toggle button1;
         toggle button2;
         toggle button3;
+    
+        slider slider1;
 	public:
 		void setup();
 		void update();
