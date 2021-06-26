@@ -58,6 +58,13 @@ int slider::get_value(){
     return value;
 }
 
+void slider::update(int x, int y){
+    ticker_y -= posy - y;
+
+    posx = x;
+    posy = y;
+}
+
 void slider::setup(int x, int y){
     posx = x;
     posy = y;
@@ -70,8 +77,9 @@ void slider::run(){
     ofDrawRectangle(posx, posy, width, height);
     int altura_ticker = height/100 + 5;
     ofDrawRectangle(posx, ticker_y, width, altura_ticker); //Ticker
-    
-    if (ofGetMousePressed() and ((abs(ofGetMouseX() - posx - width/2.0) < width/2.0 - altura_ticker/2.0) and abs(ofGetMouseY() - posy - height/2.0) < height/2.0 - altura_ticker/2.0))
+
+    //
+    if (ofGetMousePressed() and ((abs(ofGetMouseX() - posx - width/2.0) < width/2.0) and abs(ofGetMouseY() - posy - height/2.0) < height/2.0 - altura_ticker/2.0))
     {
         //ofFill();
         ticker_y = (int)(ofGetMouseY() - altura_ticker/2.0 + 1);
@@ -243,7 +251,7 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
         sample=0;
         for(int ball=0; ball < N ;ball++)
         {
-            sample += sin(balls[ball].getNote()*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
+            sample += volume*sin(balls[ball].getNote()*phase[ball])*envelope(phase[ball]); // generating a sine wave sample
             phase[ball] += 0.05;
         }
         //float sample = sin(phase[0]);//*envelope(phase[0]); // generating a sine wave sample
@@ -276,18 +284,20 @@ void ofApp::update(){
     synth_menu.button2.setup(synth_menu.menu_x+2*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
     synth_menu.button3.setup(synth_menu.menu_x+3*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
    
-    synth_menu.slider1.setup(synth_menu.menu_x+4*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider2.setup(synth_menu.menu_x+5*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider3.setup(synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider4.setup(synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
+    synth_menu.slider1.update(synth_menu.menu_x+4*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
+    synth_menu.slider2.update(synth_menu.menu_x+5*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
+    synth_menu.slider3.update(synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
+    synth_menu.slider4.update(synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
 
     mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
     mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
     mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
    
-    mech_menu.slider1.setup(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-    mech_menu.slider2.setup(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-    mech_menu.slider3.setup(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+    mech_menu.slider1.update(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+    mech_menu.slider2.update(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+    mech_menu.slider3.update(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+    
+    volume = synth_menu.slider4.get_value()/100.0;
 }
 
 //--------------------------------------------------------------
@@ -310,8 +320,6 @@ void ofApp::draw(){
         ofDrawRectangle(synth_menu.menu_x-5, synth_menu.menu_y-5, synth_menu.menu_width+10, synth_menu.menu_height+10);
         ofSetColor(150,150,150);
         ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, synth_menu.menu_width, synth_menu.menu_height);
-        ofSetColor(150,0,255);
-        ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, synth_menu.menu_width, 5);
         
         ofSetColor(0,0,255);
         // in draw:
@@ -331,8 +339,6 @@ void ofApp::draw(){
         ofDrawRectangle(mech_menu.menu_x-5, mech_menu.menu_y-5, mech_menu.menu_width+10, mech_menu.menu_height+10);
         ofSetColor(150,150,150);
         ofDrawRectangle(mech_menu.menu_x, mech_menu.menu_y, mech_menu.menu_width, mech_menu.menu_height);
-        ofSetColor(150,0,255);
-        ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, synth_menu.menu_width, 5);
         
         ofSetColor(0,0,255);
         // in draw:
@@ -425,10 +431,10 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    if(synth_menu.pop_menu and (x>synth_menu.menu_x and x<synth_menu.menu_x+synth_menu.menu_width and y>synth_menu.menu_y and y<synth_menu.menu_y+10 or synth_menu.dragged)){
+    if(synth_menu.pop_menu and synth_menu.dragged){
         synth_menu.menu_x = ofGetMouseX()-synth_menu.drag_distx;
         synth_menu.menu_y = ofGetMouseY()-synth_menu.drag_disty;
-    } else if(mech_menu.pop_menu and (x>mech_menu.menu_x and x<mech_menu.menu_x+mech_menu.menu_width and y>mech_menu.menu_y and y<mech_menu.menu_y+10 or mech_menu.dragged)){
+    } else if(mech_menu.pop_menu and mech_menu.dragged){
         mech_menu.menu_x = ofGetMouseX()-mech_menu.drag_distx;
         mech_menu.menu_y = ofGetMouseY()-mech_menu.drag_disty;
     }
@@ -436,11 +442,11 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    if(synth_menu.pop_menu and x>synth_menu.menu_x and x<synth_menu.menu_x+synth_menu.menu_width and y>synth_menu.menu_y and y<synth_menu.menu_y+10){
+    if(synth_menu.pop_menu and x>synth_menu.menu_x and x<synth_menu.menu_x+synth_menu.menu_width and y>synth_menu.menu_y and y<synth_menu.menu_y+25){
         synth_menu.drag_distx = ofGetMouseX()-synth_menu.menu_x;
         synth_menu.drag_disty = ofGetMouseY()-synth_menu.menu_y;
         synth_menu.dragged = true;
-    } else if(mech_menu.pop_menu and x>mech_menu.menu_x and x<mech_menu.menu_x+mech_menu.menu_width and y>mech_menu.menu_y and y<mech_menu.menu_y+10){
+    } else if(mech_menu.pop_menu and x>mech_menu.menu_x and x<mech_menu.menu_x+mech_menu.menu_width and y>mech_menu.menu_y and y<mech_menu.menu_y+25){
         mech_menu.drag_distx = ofGetMouseX()-mech_menu.menu_x;
         mech_menu.drag_disty = ofGetMouseY()-mech_menu.menu_y;
         mech_menu.dragged = true;

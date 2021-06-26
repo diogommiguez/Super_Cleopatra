@@ -38,6 +38,7 @@ class slider : public ofBaseApp{
         bool selected; // Para continuar selecionado quando saimos das fronteiras do slider
     public:
         void setup(int, int);
+        void update(int, int);
         void run();
 
         int get_posx();
@@ -139,6 +140,7 @@ class ofApp : public ofBaseApp{
         vector<double> phase;
         double attack;
         double decay;
+        double volume = 0.5;
         int N;
     //MENUS
         menu synth_menu;
