@@ -32,6 +32,9 @@ class Ball : public ofBaseApp{
         bool mouse_g = false; // a bola é graviticamente atraída ou não pelo rato
     // parametros musicais
         int note; // nota que vai tocar
+        int nnotes = 5; // numero de notas possíveis
+        //double notes[5] = {261.63,277.18,329.63,349.23,415.30}; // frequências em Hertz
+        double notes[5] = {349.23,392.00,415.30,493.88,523.25};
     public:
         void set_posx(double);
         void move_x(double); // adiciona à posição x da bola
@@ -52,7 +55,6 @@ class Ball : public ofBaseApp{
         bool hit_note = false;
         void setmouse_g(bool act) {mouse_g = act;};
         bool getmouse_g() {return mouse_g;};
-        int nnotes = 7; // numero de notas possíveis
 };
 
 #endif /* ball_hpp */

@@ -9,6 +9,7 @@
 #include "menu.hpp"
 #include "ball.hpp"
 #include "func.hpp"
+#include "ofxmaxim.h"
 
 class ofApp : public ofBaseApp{
     public:
@@ -40,9 +41,12 @@ class ofApp : public ofBaseApp{
         double attack;
         double decay;
         double volume = 0.5;
-        vector<double> notes;
-        //int nnotes = 7; // numero de notas
-       // double notes[7] = {349.23,392.00,415.30,493.88,523.25,600,700};
+        int N;
+        double max_audio = 2;
+    // ADICIONADO PELO THOMAS->
+        double Filterfreq;
+        ofxMaxiFilter myFilter;
+    // <-ADICIONADO PELO THOMAS
     //MENUS
         menu synth_menu;
         menu mech_menu;
