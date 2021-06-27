@@ -1,219 +1,5 @@
 #include "ofApp.h"
 
-// FUNÇÕES GERAIS
-double distance(double x1, double y1, double x2, double y2)
-{
-    return pow(pow(x1 - x2, 2) + pow(y1 - y2, 2),1/2.0);
-}
-
-//--------------------------------------------------------------//
-// TOGGLE                                                       //
-//--------------------------------------------------------------//
-void toggle::toggle_status(){
-    if(status)
-        status = false;
-    else
-        status = true;
-}
-void toggle::setup(int x, int y)
-{
-    posx = x;
-    posy = y;
-}
-
-void toggle::run(){
-    ofNoFill();
-    ofDrawRectangle(posx, posy, size, size);
-    
-    ofFill();
-    if (not ofGetMousePressed())
-        mouse_previous_pressed = false;
-    if (ofGetMousePressed() and (not mouse_previous_pressed)){
-        mouse_previous_pressed = true;
-        if (((abs(ofGetMouseX() - posx - size/2.0) < size/2.0) and abs(ofGetMouseY() - posy - size/2.0) < size/2.0))
-        {
-            cout << "toggle x: " << posx << "\nrato x: " << ofGetMouseX() << endl;
-            cout << "toggle y: " << posy << "\nrato y: " << ofGetMouseY() << endl;
-            ofDrawRectangle(posx + 3, posy + 3, size - 6, size - 6);
-            toggle_status();
-        }
-    }
-    if (status == true){
-        ofDrawRectangle(posx + 3, posy + 3, size - 6, size - 6);
-    }
-}
-
-//--------------------------------------------------------------//
-// SLIDER                                                       //
-//--------------------------------------------------------------//
-int slider::get_posx(){
-    return posx;
-}
-
-int slider::get_posy(){
-    return posy;
-}
-
-int slider::get_value(){
-    return value;
-}
-
-void slider::update(int x, int y){
-    ticker_y -= posy - y;
-
-    posx = x;
-    posy = y;
-}
-
-void slider::setup(int x, int y){
-    posx = x;
-    posy = y;
-    
-    ticker_y = posy + height - (height/100.0 + 5);
-}
-
-void slider::run(){
-    ofNoFill();
-    ofDrawRectangle(posx, posy, width, height);
-    int altura_ticker = height/100 + 5;
-    ofDrawRectangle(posx, ticker_y, width, altura_ticker); //Ticker
-
-    //
-    if (ofGetMousePressed() and ((abs(ofGetMouseX() - posx - width/2.0) < width/2.0) and abs(ofGetMouseY() - posy - height/2.0) < height/2.0 - altura_ticker/2.0))
-    {
-        //ofFill();
-        ticker_y = (int)(ofGetMouseY() - altura_ticker/2.0 + 1);
-    }
-    value = 102*(100 - 100*(ticker_y - (posy + altura_ticker))/height  - 12)/93;
-    ofFill();
-}
-
-//--------------------------------------------------------------//
-// BALL                                                         //
-//--------------------------------------------------------------//
-
-//--------------------------------------------------------------
-void Ball::set_posx(double x){
-    posx = x;
-}
-
-//--------------------------------------------------------------
-void Ball::move_x(double dx){
-    posx += dx;
-}
-
-//--------------------------------------------------------------
-void Ball::set_posy(double y){
-    posy = y;
-}
-
-//--------------------------------------------------------------
-void Ball::move_y(double dy){
-    posy += dy;
-}
-
-//--------------------------------------------------------------
-void Ball::set_radius(int r){
-    radius = r;
-}
-
-//--------------------------------------------------------------
-void Ball::set_color(int hue){
-    color.setHsb(hue, 255, 255);
-}
-
-//--------------------------------------------------------------
-const double Ball::get_posx(){
-    return posx;
-}
-
-//--------------------------------------------------------------
-const double Ball::get_posy(){
-    return posy;
-}
-
-//--------------------------------------------------------------
-const int Ball::get_radius(){
-    return radius;
-}
-
-//--------------------------------------------------------------
-const double Ball::get_v_y(){
-    return v_y;
-}
-
-//--------------------------------------------------------------
-void Ball::set_v_y(double _v_y){
-    v_y = _v_y;
-}
-
-//--------------------------------------------------------------
-void Ball::set_v_x(double _v_x){
-    v_x = _v_x;
-}
-
-//--------------------------------------------------------------
-const ofColor Ball::get_color(){
-    return color;
-}
-
-//--------------------------------------------------------------
-void Ball::evolve(){
-    //PEGAR NA BOLA
-    if (ofGetMousePressed() and (distance(posx, posy, ofGetMouseX(), ofGetMouseY()) < radius or caught))
-    {
-        double aux_x = posx;
-        double aux_y = posy;
-        
-        posx = ofGetMouseX();
-        posy = ofGetMouseY();
-        
-        v_x= (posx-aux_x)/dt;
-        v_y= (posy-aux_y)/dt;
-        
-        caught = true;
-    } else {
-      
-    caught = false;
-    hit_note = false;
-
-    double aux_x = posx;
-    double aux_y = posy;
-
-    int gravity = (mouse_g==true)? 1 : 0 ;
-        
-    posx += dt*v_x + gravity*dt*dt*a*(ofGetMouseX()-posx)/(0.01+abs(pow(ofGetMouseX()-posx,1)));
-    posy += dt*v_y + dt*dt*(g+gravity*(ofGetMouseY()-posy)*a/(0.01+abs(pow(ofGetMouseY()-posy,1))));
-
-    v_x= (posx-aux_x)/dt;
-    v_y= (posy-aux_y)/dt;
-    
-    if(posy >ofGetHeight()-radius-15 && closed_floor ){
-            hit_note = true;
-            posy = ofGetHeight()-radius-15;
-            set_v_y(-get_v_y());
-            note = notes[(int)(posx*nnotes/ofGetWidth())];
-        }
-    // CONDIÇÕES FRONTEIRA
-    if(posx > ofGetWidth()){
-        posx -= ofGetWidth();
-    }
-    if(posx < 0){
-        posx += ofGetWidth();
-    }
-      
-    }
-}
-
-//--------------------------------------------------------------
-int Ball::getNote(){
-    return note;
-}
-
-//--------------------------------------------------------------//
-// ofApp                                                        //
-//--------------------------------------------------------------//
-
 //--------------------------------------------------------------
 void ofApp::setup(){
     attack = 150;
@@ -222,27 +8,142 @@ void ofApp::setup(){
     ofSoundStreamSetup(2, 0); // 2 output channels (stereo), 0 input channels
     ofSetCircleResolution(100);
     
+    // SYNTH MENU ---------------------------------------------
+
+    synth_menu.menu_width = 300;
+    synth_menu.menu_height = 210;
+
+    synth_menu.vecToggles.push_back(toggle(synth_menu.menu_x+0*synth_menu.menu_width/8.0+15  ,synth_menu.menu_y+synth_menu.menu_height/3.-30));
+    synth_menu.vecToggles.push_back(toggle(synth_menu.menu_x+1*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-30));
+    synth_menu.vecToggles.push_back(toggle(synth_menu.menu_x+2*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-30));
+    
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+0*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+1*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+2*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+4*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+5*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    
+
+    // MECHANICS MENU ---------------------------------------------
+    
+    // pos inicial em relação ao synth menu
     mech_menu.menu_x = synth_menu.menu_x;
     mech_menu.menu_y = synth_menu.menu_y + synth_menu.menu_height + 20;
     
-    synth_menu.button1.setup(synth_menu.menu_x+synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
-    synth_menu.button2.setup(synth_menu.menu_x+2*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
-    synth_menu.button3.setup(synth_menu.menu_x+3*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
-   
-    synth_menu.slider1.setup(synth_menu.menu_x+4*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider2.setup(synth_menu.menu_x+5*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider3.setup(synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider4.setup(synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-
-    mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-    mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-    mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-   
-    mech_menu.slider1.setup(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-    mech_menu.slider2.setup(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-    mech_menu.slider3.setup(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+//    mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
+//    mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
+//    mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
+//
+//    mech_menu.slider1.setup(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+//    mech_menu.slider2.setup(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+//    mech_menu.slider3.setup(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
     
 }
+
+//--------------------------------------------------------------
+void ofApp::update(){
+
+    for(int i = 0; i<balls.size() and !pause; i++){
+        if(balls[i].hit_note==true){
+            phase[i] = 0;
+        }
+        balls[i].evolve();
+    }
+    synth_menu.vecToggles[0].setup(synth_menu.menu_x+0*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-30);
+    synth_menu.vecToggles[1].setup(synth_menu.menu_x+1*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-30);
+    synth_menu.vecToggles[2].setup(synth_menu.menu_x+2*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-30);
+
+    synth_menu.vecSliders[0].update(synth_menu.menu_x+0*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[1].update(synth_menu.menu_x+1*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[2].update(synth_menu.menu_x+2*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[3].update(synth_menu.menu_x+4*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[4].update(synth_menu.menu_x+5*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[5].update(synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[6].update(synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.);
+    
+    
+//    mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
+//    mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
+//    mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
+//
+//    mech_menu.slider1.update(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+//    mech_menu.slider2.update(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+//    mech_menu.slider3.update(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+    
+    volume = 1;//synth_menu.vecSliders[0].get_value()/200.0;
+}
+
+//--------------------------------------------------------------
+void ofApp::draw(){
+    ofColor colorOne(50, 25,200);
+    ofColor colorTwo(150, 20, 150);
+
+    ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
+
+    for(int i = 0; i<balls.size(); i++){
+        ofSetColor(balls[i].get_color());
+        ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
+    }
+    for(int i =0; i<15; i++){
+        ofSetColor(i*255/5, 100*(1+sin(i)), 255-i*255/5);
+        ofDrawRectangle(i*ofGetWidth()/5, ofGetHeight()-15, (i+1)*ofGetWidth()/5, ofGetHeight());
+    }
+    if(synth_menu.pop_menu){
+        // CAIXINHAS DE MENU
+        ofSetColor(100,100,100);
+        ofDrawRectangle(synth_menu.menu_x-5, synth_menu.menu_y-5, synth_menu.menu_width+10, synth_menu.menu_height+10);
+        ofSetColor(150,150,150);
+        ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, synth_menu.menu_width, synth_menu.menu_height);
+        ofSetColor(100,100,100);
+        ofDrawRectangle(synth_menu.menu_x+3*synth_menu.menu_width/8.0+15, synth_menu.menu_y-5, 5, synth_menu.menu_height+10);
+        
+        // LETRAS E SIMBOLOS
+        ofSetColor(0,0,0);
+        ofDrawBitmapString("SYNTH MENU", synth_menu.menu_x+5*synth_menu.menu_width/8.0-10,synth_menu.menu_y+synth_menu.menu_height/8.0);
+        
+        ofDrawCircle(synth_menu.menu_x+0*synth_menu.menu_width/8.0+25,synth_menu.menu_y+synth_menu.menu_height/3.-50, 10);
+        ofDrawRectangle(synth_menu.menu_x+1*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-60, 20,20);
+        ofDrawTriangle(synth_menu.menu_x+2*synth_menu.menu_width/8.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-60,
+                       synth_menu.menu_x+2*synth_menu.menu_width/8.0+35,synth_menu.menu_y+synth_menu.menu_height/3.-60,
+                       synth_menu.menu_x+2*synth_menu.menu_width/8.0+25,synth_menu.menu_y+synth_menu.menu_height/3.-40);
+        
+        
+        ofSetColor(0,0,255);
+        ofDrawBitmapString("ATT", synth_menu.menu_x+4*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.-20);
+        ofDrawBitmapString("DEC",  synth_menu.menu_x+5*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.-20);
+        ofDrawBitmapString("FIL", synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.-20);
+        ofDrawBitmapString("VOL", synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.-20);
+        
+        // TOGGLES E SLIDERS
+        for(int i =0; i<synth_menu.vecToggles.size(); i++){
+            synth_menu.vecToggles[i].run();
+        }
+        for(int i =0; i<synth_menu.vecSliders.size(); i++){
+            synth_menu.vecSliders[i].run();
+        }
+    }
+    
+    if(mech_menu.pop_menu){
+        ofSetColor(100,100,100);
+        ofDrawRectangle(mech_menu.menu_x-5, mech_menu.menu_y-5, mech_menu.menu_width+10, mech_menu.menu_height+10);
+        ofSetColor(150,150,150);
+        ofDrawRectangle(mech_menu.menu_x, mech_menu.menu_y, mech_menu.menu_width, mech_menu.menu_height);
+        
+        ofSetColor(0,0,255);
+        // in draw:
+        ofDrawBitmapString("MECHANICS MENU", mech_menu.menu_x+mech_menu.menu_width/2.0-100,mech_menu.menu_y+mech_menu.menu_height/6.0);
+        
+//        mech_menu.button1.run();
+//        mech_menu.button2.run();
+//        mech_menu.button3.run();
+//        mech_menu.slider1.run();
+//        mech_menu.slider2.run();
+//        mech_menu.slider3.run();
+    }
+}
+
 
 //--------------------------------------------------------------
 void ofApp::audioOut( ofSoundBuffer &outBuffer) {
@@ -276,88 +177,6 @@ double ofApp::envelope(double phase){
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
-
-    for(int i = 0; i<balls.size() and !pause; i++){
-        if(balls[i].hit_note==true){
-            phase[i] = 0;
-        }
-        balls[i].evolve();
-    }
-    synth_menu.button1.setup(synth_menu.menu_x+synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
-    synth_menu.button2.setup(synth_menu.menu_x+2*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
-    synth_menu.button3.setup(synth_menu.menu_x+3*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/2.0);
-   
-    synth_menu.slider1.update(synth_menu.menu_x+4*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider2.update(synth_menu.menu_x+5*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider3.update(synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-    synth_menu.slider4.update(synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+25);
-
-    mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-    mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-    mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-   
-    mech_menu.slider1.update(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-    mech_menu.slider2.update(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-    mech_menu.slider3.update(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-    
-    volume = synth_menu.slider4.get_value()/100.0;
-}
-
-//--------------------------------------------------------------
-void ofApp::draw(){
-    ofColor colorOne(50, 25,200);
-    ofColor colorTwo(150, 20, 150);
-
-    ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
-
-    for(int i = 0; i<balls.size(); i++){
-        ofSetColor(balls[i].get_color());
-        ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
-    }
-    for(int i =0; i<15; i++){
-        ofSetColor(i*255/5, 100*(1+sin(i)), 255-i*255/5);
-        ofDrawRectangle(i*ofGetWidth()/5, ofGetHeight()-15, (i+1)*ofGetWidth()/5, ofGetHeight());
-    }
-    if(synth_menu.pop_menu){
-        ofSetColor(100,100,100);
-        ofDrawRectangle(synth_menu.menu_x-5, synth_menu.menu_y-5, synth_menu.menu_width+10, synth_menu.menu_height+10);
-        ofSetColor(150,150,150);
-        ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, synth_menu.menu_width, synth_menu.menu_height);
-        
-        ofSetColor(0,0,255);
-        // in draw:
-        ofDrawBitmapString("SYNTH MENU", synth_menu.menu_x+synth_menu.menu_width/2.0-105,synth_menu.menu_y+synth_menu.menu_height/6.0);
-        
-        synth_menu.button1.run();
-        synth_menu.button2.run();
-        synth_menu.button3.run();
-        synth_menu.slider1.run();
-        synth_menu.slider2.run();
-        synth_menu.slider3.run();
-        synth_menu.slider4.run();
-    }
-    
-    if(mech_menu.pop_menu){
-        ofSetColor(100,100,100);
-        ofDrawRectangle(mech_menu.menu_x-5, mech_menu.menu_y-5, mech_menu.menu_width+10, mech_menu.menu_height+10);
-        ofSetColor(150,150,150);
-        ofDrawRectangle(mech_menu.menu_x, mech_menu.menu_y, mech_menu.menu_width, mech_menu.menu_height);
-        
-        ofSetColor(0,0,255);
-        // in draw:
-        ofDrawBitmapString("MECHANICS MENU", mech_menu.menu_x+mech_menu.menu_width/2.0-100,mech_menu.menu_y+mech_menu.menu_height/6.0);
-        
-        mech_menu.button1.run();
-        mech_menu.button2.run();
-        mech_menu.button3.run();
-        mech_menu.slider1.run();
-        mech_menu.slider2.run();
-        mech_menu.slider3.run();
-    }
-}
-
-//--------------------------------------------------------------
 void ofApp::random_v(){
     for(int i = 0; i<balls.size(); i++){
         balls[i].set_v_x(ofRandom(-1000,1000));
@@ -381,7 +200,7 @@ void ofApp::keyPressed(int key){
         case 'q':
             OF_EXIT_APP(0);
             break;
-        case ' ':
+        case 'v':
             random_v();
             break;
         case 'o':
@@ -401,12 +220,9 @@ void ofApp::keyPressed(int key){
         case 'n':
             (mech_menu.pop_menu == false) ? mech_menu.pop_menu = true : mech_menu.pop_menu = false;
             break;
-        case 'p':
+        case ' ':
             (pause == false) ? pause = true : pause = false;
             break;
-//        case 'c':
-//            phase[2]=0;
-//            break;
     }
 }
 

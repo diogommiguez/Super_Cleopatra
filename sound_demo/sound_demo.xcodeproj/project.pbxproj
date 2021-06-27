@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03AE8C232688B8100024C1BC /* slider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03AE8C212688B8100024C1BC /* slider.cpp */; };
+		03AE8C262688B8870024C1BC /* toggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03AE8C242688B8870024C1BC /* toggle.cpp */; };
+		03AE8C292688B8FC0024C1BC /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03AE8C272688B8FC0024C1BC /* ball.cpp */; };
+		03AE8C2C2688B93F0024C1BC /* menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03AE8C2A2688B93F0024C1BC /* menu.cpp */; };
+		03AE8C2F2688B9C20024C1BC /* func.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03AE8C2D2688B9C20024C1BC /* func.cpp */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
 /* End PBXBuildFile section */
@@ -24,6 +29,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03AE8C212688B8100024C1BC /* slider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = slider.cpp; sourceTree = "<group>"; };
+		03AE8C222688B8100024C1BC /* slider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = slider.hpp; sourceTree = "<group>"; };
+		03AE8C242688B8870024C1BC /* toggle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = toggle.cpp; sourceTree = "<group>"; };
+		03AE8C252688B8870024C1BC /* toggle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = toggle.hpp; sourceTree = "<group>"; };
+		03AE8C272688B8FC0024C1BC /* ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ball.cpp; sourceTree = "<group>"; };
+		03AE8C282688B8FC0024C1BC /* ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ball.hpp; sourceTree = "<group>"; };
+		03AE8C2A2688B93F0024C1BC /* menu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = menu.cpp; sourceTree = "<group>"; };
+		03AE8C2B2688B93F0024C1BC /* menu.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = menu.hpp; sourceTree = "<group>"; };
+		03AE8C2D2688B9C20024C1BC /* func.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = func.cpp; sourceTree = "<group>"; };
+		03AE8C2E2688B9C20024C1BC /* func.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = func.hpp; sourceTree = "<group>"; };
 		E42962AC2163EDD300A6A9E2 /* ofCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofCamera.cpp; path = ../../../libs/openFrameworks/3d/ofCamera.cpp; sourceTree = SOURCE_ROOT; };
 		E42962AD2163EDD300A6A9E2 /* ofMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofMesh.h; path = ../../../libs/openFrameworks/3d/ofMesh.h; sourceTree = SOURCE_ROOT; };
 		E42962AE2163EDD300A6A9E2 /* ofNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofNode.h; path = ../../../libs/openFrameworks/3d/ofNode.h; sourceTree = SOURCE_ROOT; };
@@ -531,8 +546,18 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
+				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
+				03AE8C282688B8FC0024C1BC /* ball.hpp */,
+				03AE8C272688B8FC0024C1BC /* ball.cpp */,
+				03AE8C2E2688B9C20024C1BC /* func.hpp */,
+				03AE8C2D2688B9C20024C1BC /* func.cpp */,
+				03AE8C2B2688B93F0024C1BC /* menu.hpp */,
+				03AE8C2A2688B93F0024C1BC /* menu.cpp */,
+				03AE8C222688B8100024C1BC /* slider.hpp */,
+				03AE8C212688B8100024C1BC /* slider.cpp */,
+				03AE8C252688B8870024C1BC /* toggle.hpp */,
+				03AE8C242688B8870024C1BC /* toggle.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -636,6 +661,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				03AE8C262688B8870024C1BC /* toggle.cpp in Sources */,
+				03AE8C2F2688B9C20024C1BC /* func.cpp in Sources */,
+				03AE8C2C2688B93F0024C1BC /* menu.cpp in Sources */,
+				03AE8C232688B8100024C1BC /* slider.cpp in Sources */,
+				03AE8C292688B8FC0024C1BC /* ball.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
