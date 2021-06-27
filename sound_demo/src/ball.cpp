@@ -108,7 +108,8 @@ void Ball::evolve(){
             hit_note = true;
             posy = ofGetHeight()-radius-15;
             set_v_y(-get_v_y());
-            note = notes[(int)(posx*nnotes/ofGetWidth())];
+            //note = notes[(int)(posx*nnotes/ofGetWidth())];
+            note = (int)(posx*nnotes/ofGetWidth());
         }
     // CONDIÇÕES FRONTEIRA
     if(posx > ofGetWidth()){

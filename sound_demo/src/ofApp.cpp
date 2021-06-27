@@ -8,6 +8,20 @@ void ofApp::setup(){
     ofSoundStreamSetup(2, 0); // 2 output channels (stereo), 0 input channels
     ofSetCircleResolution(100);
     
+    // NOTAS ---------------------------------------------
+    
+    notes.push_back(1046.50);
+    notes.push_back(1174.66);
+    notes.push_back(1396.91);
+    notes.push_back(1567.98);
+    notes.push_back(1760.00);
+    
+    notes.push_back(2093.00);
+    notes.push_back(2349.32);
+    notes.push_back(2793.83);
+    notes.push_back(3135.96);
+    notes.push_back(3520.00);
+
     // SYNTH MENU ---------------------------------------------
 
     synth_menu.menu_width = 300;
@@ -88,9 +102,9 @@ void ofApp::draw(){
         ofSetColor(balls[i].get_color());
         ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
     }
-    for(int i =0; i<15; i++){
-        ofSetColor(i*255/5, 100*(1+sin(i)), 255-i*255/5);
-        ofDrawRectangle(i*ofGetWidth()/5, ofGetHeight()-15, (i+1)*ofGetWidth()/5, ofGetHeight());
+    for(int i =0; i<notes.size(); i++){
+        ofSetColor(i*255/notes.size(), 127*(1+sin(i/2.0)), 255-i*255/notes.size());
+        ofDrawRectangle(i*ofGetWidth()/notes.size(), ofGetHeight()-15, (i+1)*ofGetWidth()/notes.size(), ofGetHeight());
     }
     if(synth_menu.pop_menu){
         // CAIXINHAS DE MENU
@@ -152,12 +166,12 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
     float sample;
     for(int i = 0; i < outBuffer.size(); i += 2) {
         sample=0;
-        for(int ball=0; ball < N ;ball++)
+        for(int ball=0; ball < balls.size() ;ball++)
         {
-            sample += volume*( sin(balls[ball].getNote()*phase[ball]/512.0)
-                              +0.6*sin(balls[ball].getNote()*3*phase[ball]/512.0)
-                              +0.4*sin(balls[ball].getNote()*5*phase[ball]/512.0)
-                              +0.2*sin(balls[ball].getNote()*7*phase[ball]/512.0)
+            sample += volume*( sin(notes[balls[ball].getNote()]*phase[ball]/512.0)
+                              //+0.8*sin(notes[balls[ball].getNote()]*3*phase[ball]/512.0)
+                              //+0.5*sin(notes[balls[ball].getNote()]*6*phase[ball]/512.0)
+                              //+0.3*sin(notes[balls[ball].getNote()]*9*phase[ball]/512.0)
                               )*envelope(phase[ball]); // generating a sine wave sample
             phase[ball] += 0.05;
         }
@@ -235,9 +249,9 @@ void ofApp::newBall(int xball, int yball){
     myball.set_posy(yball);
     myball.set_radius(ofRandom(30,40));
     myball.set_color(ofRandom(0,255));
+    myball.nnotes = notes.size();
     
     balls.push_back(myball);
-    N ++;
     phase.push_back(attack+decay);
 }
 
