@@ -72,7 +72,9 @@ void ofApp::update(){
 //    mech_menu.slider2.update(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
 //    mech_menu.slider3.update(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
     
-    volume = 1;//synth_menu.vecSliders[0].get_value()/200.0;
+    attack = synth_menu.vecSliders[3].get_value()*10.0+1;
+    decay = synth_menu.vecSliders[4].get_value()*10.0+1;
+    volume = synth_menu.vecSliders[6].get_value()/200.0;
 }
 
 //--------------------------------------------------------------
