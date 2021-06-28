@@ -54,4 +54,5 @@ void slider::run(){
     }
     value = 102*(100 - 100*(ticker_y - (posy + altura_ticker))/height  - 12)/93;
     ofFill();
+    ofDrawRectangle(posx, ticker_y+altura_ticker, width, height -(ticker_y-posy+altura_ticker)); //Ticker
 }

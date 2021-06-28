@@ -52,5 +52,10 @@ class ofApp : public ofBaseApp{
     //MENUS
         menu synth_menu;
         menu mech_menu;
+    
+    // ANIMATE
+        bool animate = false;
+        int animate_count = 0;
+        int animate_cycles = 50;
 };
 

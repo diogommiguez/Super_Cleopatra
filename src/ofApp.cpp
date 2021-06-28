@@ -11,23 +11,24 @@ void ofApp::setup(){
     
     // NOTAS ---------------------------------------------
     
+    notes.push_back(1046.50*0.25);
+    notes.push_back(1174.66*0.25);
+    notes.push_back(1396.91*0.25);
+    notes.push_back(1567.98*0.25);
+    notes.push_back(1760.00*0.25);
+    
+    notes.push_back(1046.50*0.5);
+    notes.push_back(1174.66*0.5);
+    notes.push_back(1396.91*0.5);
+    notes.push_back(1567.98*0.5);
+    notes.push_back(1760.00*0.5);
+    
     notes.push_back(1046.50);
     notes.push_back(1174.66);
     notes.push_back(1396.91);
     notes.push_back(1567.98);
     notes.push_back(1760.00);
     
-    notes.push_back(2093.00);
-    notes.push_back(2349.32);
-    notes.push_back(2793.83);
-    notes.push_back(3135.96);
-    notes.push_back(3520.00);
-    
-    notes.push_back(1046.50*3);
-    notes.push_back(1174.66*3);
-    notes.push_back(1396.91*3);
-    notes.push_back(1567.98*3);
-    notes.push_back(1760.00*3);
 
     // SYNTH MENU ---------------------------------------------
 
@@ -67,6 +68,9 @@ void ofApp::setup(){
 void ofApp::update(){
 
     for(int i = 0; i<balls.size() and !pause; i++){
+        if(balls[i].get_posy()>ofGetHeight()+5){
+            balls.erase(balls.begin() + i);
+        }
         if(balls[i].hit_note==true){
             phase[i] = 0;
         }
@@ -84,7 +88,11 @@ void ofApp::update(){
     synth_menu.vecSliders[5].update(synth_menu.menu_x+6*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.);
     synth_menu.vecSliders[6].update(synth_menu.menu_x+7*synth_menu.menu_width/8.0,synth_menu.menu_y+synth_menu.menu_height/3.);
     
-    
+    if(animate and animate_count < animate_cycles){
+            animate_count++;
+    }else if (!animate and animate_count > 0) {
+            animate_count--;
+    }
 //    mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
 //    mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
 //    mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
@@ -107,20 +115,28 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofColor colorOne(50, 25,200);
-    ofColor colorTwo(0, 0,50);
-    //ofColor colorTwo(150, 20, 150);
+    
+    ofColor colorOne;
+    ofColor colorTwo;
 
+    colorOne.set(ofMap(animate_count, 0, animate_cycles, 50, 0),
+                 ofMap(animate_count, 0, animate_cycles, 25, 0),
+                 ofMap(animate_count, 0, animate_cycles, 200, 0));
+    
+    colorTwo.set(0,0,0);
+    
     ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
-
-    for(int i = 0; i<balls.size(); i++){
+    
+    for(int i =0; i<notes.size(); i++){
+        ofSetColor(i*255/notes.size(), 127*(1+sin(i/2.0)), 255-i*255/notes.size());
+        ofDrawRectangle(i*ofGetWidth()/notes.size(), ofGetHeight()-ofMap(animate_count, 0, animate_cycles, 15, 0), (i+1)*ofGetWidth()/notes.size(), ofGetHeight());
+    }
+    
+    for(int i = 0; i<balls.size() ; i++){
         ofSetColor(balls[i].get_color());
         ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
     }
-    for(int i =0; i<notes.size(); i++){
-        ofSetColor(i*255/notes.size(), 127*(1+sin(i/2.0)), 255-i*255/notes.size());
-        ofDrawRectangle(i*ofGetWidth()/notes.size(), ofGetHeight()-15, (i+1)*ofGetWidth()/notes.size(), ofGetHeight());
-    }
+    
     if(synth_menu.pop_menu){
         // CAIXINHAS DE MENU
         ofSetColor(100,100,100);
@@ -282,6 +298,14 @@ void ofApp::keyPressed(int key){
             break;
         case ' ':
             (pause == false) ? pause = true : pause = false;
+            break;
+        case 'a':
+            if(animate){
+                animate = false;
+            } else{
+                animate = true;
+                open_floor();
+            }
             break;
     }
 }
