@@ -19,12 +19,17 @@ void toggle::toggle_status(){
     else
         status = true;
 }
+
 void toggle::setup(int x, int y)
 {
     posx = x;
     posy = y;
 }
 
+bool toggle::get_status()
+{
+    return status;
+}
 void toggle::run(){
     ofNoFill();
     ofDrawRectangle(posx, posy, size, size);

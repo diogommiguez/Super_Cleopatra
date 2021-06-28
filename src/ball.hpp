@@ -10,6 +10,7 @@
 
 #include "ofMain.h"
 #include "func.hpp"
+#include "ofxMaxim.h"
 #include <stdio.h>
 
 class Ball : public ofBaseApp{
@@ -32,6 +33,7 @@ class Ball : public ofBaseApp{
         bool mouse_g = false; // a bola é graviticamente atraída ou não pelo rato
     // parametros musicais
         int note; // nota que vai tocar
+    
     public:
         void set_posx(double);
         void move_x(double); // adiciona à posição x da bola
@@ -53,6 +55,10 @@ class Ball : public ofBaseApp{
         void setmouse_g(bool act) {mouse_g = act;};
         bool getmouse_g() {return mouse_g;};
         int nnotes = 7; // numero de notas possíveis
+    
+        ofxMaxiOsc Osc_sine;
+        ofxMaxiOsc Osc_quad;
+        ofxMaxiOsc Osc_trig;
 };
 
 #endif /* ball_hpp */

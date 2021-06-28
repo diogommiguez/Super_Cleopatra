@@ -17,16 +17,13 @@ class toggle : public ofBaseApp{
         int  posy;
         bool status = false; //On (True) - Off (False)
         int  size = 20;
-        bool mouse_previous_pressed;
+        bool mouse_previous_pressed = false;
     public:
         toggle(int,int);
         void setup(int, int);
         void run();
     
-        int get_posx();
-        int get_posy();
         bool get_status();
-    
         void toggle_status();
 };
 

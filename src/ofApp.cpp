@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
     attack = 150;
     decay = 200;
     
@@ -21,6 +22,12 @@ void ofApp::setup(){
     notes.push_back(2793.83);
     notes.push_back(3135.96);
     notes.push_back(3520.00);
+    
+    notes.push_back(1046.50*3);
+    notes.push_back(1174.66*3);
+    notes.push_back(1396.91*3);
+    notes.push_back(1567.98*3);
+    notes.push_back(1760.00*3);
 
     // SYNTH MENU ---------------------------------------------
 
@@ -86,16 +93,23 @@ void ofApp::update(){
 //    mech_menu.slider2.update(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
 //    mech_menu.slider3.update(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
     
-    attack = synth_menu.vecSliders[3].get_value()*10.0+1;
-    decay = synth_menu.vecSliders[4].get_value()*10.0+1;
+    attack = synth_menu.vecSliders[3].get_value()*5.0+1;
+    decay = synth_menu.vecSliders[4].get_value()*5.0+1;
     volume = synth_menu.vecSliders[6].get_value()/200.0;
-    Filterfreq = synth_menu.vecSliders[5].get_value()*40;
+    Filterfreq = synth_menu.vecSliders[5].get_value()*20;
+    
+    wvforms[0] = synth_menu.vecToggles[0].get_status();
+    wvforms[1] = synth_menu.vecToggles[1].get_status();
+    wvforms[2] = synth_menu.vecToggles[2].get_status();
+    
+
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofColor colorOne(50, 25,200);
-    ofColor colorTwo(150, 20, 150);
+    ofColor colorTwo(0, 0,50);
+    //ofColor colorTwo(150, 20, 150);
 
     ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
 
@@ -166,22 +180,49 @@ void ofApp::draw(){
 void ofApp::audioOut( ofSoundBuffer &outBuffer) {
     float sample;
     float FilteredOutput;
+    
+    double mix_total = (synth_menu.vecSliders[0].get_value() + synth_menu.vecSliders[1].get_value() + synth_menu.vecSliders[2].get_value() + 0.0001);
+    double mix0      = (synth_menu.vecSliders[0].get_value() + 0.0001)/mix_total;
+    double mix1      = (synth_menu.vecSliders[1].get_value() + 0.0001)/mix_total;
+    double mix2      = (synth_menu.vecSliders[2].get_value() + 0.0001)/mix_total;
+    
+    cout << "mix0 = " << mix0 << "\nmix1 = " << mix1 << "\nmix2 = " << mix2 << "\nmix_total = " << mix_total << endl;
+    //bool will_normalize = false;
+    
+    //double wave[outBuffer.size()];
+
     for(int i = 0; i < outBuffer.size(); i += 2) {
         sample=0;
         for(int ball=0; ball < balls.size() ;ball++)
         {
-            sample += volume*( sin(notes[balls[ball].getNote()]*phase[ball]/512.0)
-                              //+0.8*sin(notes[balls[ball].getNote()]*3*phase[ball]/512.0)
-                              //+0.5*sin(notes[balls[ball].getNote()]*6*phase[ball]/512.0)
-                              //+0.3*sin(notes[balls[ball].getNote()]*9*phase[ball]/512.0)
-                              )*envelope(phase[ball]); // generating a sine wave sample
+            //sample += volume*(sin(notes[balls[ball].getNote()]*phase[ball]/512.0))*envelope(phase[ball]);
+            if (wvforms[0]) sample += volume*mix0*envelope(phase[ball])*(sin(notes[balls[ball].getNote()]*phase[ball]/512.0));//SINE WAVE
+            
+            if (wvforms[1]) sample += volume*mix1*envelope(phase[ball])*(sin(notes[balls[ball].getNote()]*phase[ball]/512.0)>0?1:-1);//SQUARE WAVE
+            
+            if (wvforms[2]) sample += 0.4*volume*mix2*envelope(phase[ball])*fmod(notes[balls[ball].getNote()]*phase[ball]/512.0,TWO_PI);//TRIANGLE WAVE
+            
             phase[ball] += 0.05;
         }
-        //float sample = sin(phase[0]);//*envelope(phase[0]); // generating a sine wave sample
-        FilteredOutput=myFilter.lores(sample,Filterfreq,1);
-        outBuffer[i] = FilteredOutput; // writing to the left channel
-        outBuffer[i + 1] = FilteredOutput; // writing to the right channel
+            
+            FilteredOutput=myFilter.lores(sample,Filterfreq,0);
+            //if (FilteredOutput > 1) will_normalize = true;
+        
+            outBuffer[i] = FilteredOutput; // writing to the left channel
+            outBuffer[i + 1] = FilteredOutput; // writing to the right channel
+        
+            //wave[i] = FilteredOutput; // writing to the left channel
+            //wave[i + 1] = FilteredOutput; // writing to the right channel
     }
+//    if (will_normalize)
+//    {
+//        double maximo = max(wave, outBuffer.size());
+//        for (int i = 0; i < outBuffer.size(); i += 2)
+//        {
+//            outBuffer[i] = outBuffer[i]/maximo;       // writing to the left channel
+//            outBuffer[i + 1] = outBuffer[i+1]/maximo; // writing to the right channel
+//        }
+//    }
 }
 
 //--------------------------------------------------------------
@@ -250,7 +291,7 @@ void ofApp::newBall(int xball, int yball){
     Ball myball;
     myball.set_posx(xball);
     myball.set_posy(yball);
-    myball.set_radius(ofRandom(30,40));
+    myball.set_radius(ofRandom(10,20));
     myball.set_color(ofRandom(0,255));
     myball.nnotes = notes.size();
     
