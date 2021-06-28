@@ -113,10 +113,14 @@ void Ball::evolve(){
         }
     // CONDIÇÕES FRONTEIRA
     if(posx > ofGetWidth()){
-        posx -= ofGetWidth();
+        posx = ofGetWidth();
+        v_x *= -1;
+        //posx -= ofGetWidth();
     }
     if(posx < 0){
-        posx += ofGetWidth();
+        posx = 0;
+        v_x *= -1;
+        //posx += ofGetWidth();
     }
       
     }

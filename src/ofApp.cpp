@@ -158,22 +158,16 @@ void ofApp::draw(){
         
     // CAIXINHAS DE MENU -------------
     ofColor color;
-    //ofSetColor(100,100,100);
+
     color.setHsb(0, 0, 100,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
     ofSetColor(color);
-    
     ofDrawRectangle(synth_menu.menu_x-5, synth_menu.menu_y-5, synth_menu.menu_width+10, synth_menu.menu_height+10);
-    //ofSetColor(150,150,150);
+
     color.setHsb(0, 0, 150,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
     ofSetColor(color);
-    
-    ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, synth_menu.menu_width, synth_menu.menu_height);
-    //ofSetColor(100,100,100);
-    color.setHsb(0, 0, 100,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
-    ofSetColor(color);
-
-    ofDrawRectangle(synth_menu.menu_x+3*synth_menu.menu_width/10.0+20, synth_menu.menu_y-5, 5, synth_menu.menu_height+10);
-    ofDrawRectangle(synth_menu.menu_x+7*synth_menu.menu_width/10.0+10, synth_menu.menu_y-5, 5, synth_menu.menu_height+10);
+    ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, 3*synth_menu.menu_width/10.0+15, synth_menu.menu_height);
+    ofDrawRectangle(synth_menu.menu_x+3*synth_menu.menu_width/10.0+20.0, synth_menu.menu_y, 3*synth_menu.menu_width/10.0+25, synth_menu.menu_height);
+    ofDrawRectangle(synth_menu.menu_x+3*synth_menu.menu_width/5.0+50, synth_menu.menu_y, 3*synth_menu.menu_width/10.0 - 15 , synth_menu.menu_height);
 
     // LETRAS E SIMBOLOS ------------------
     //ofSetColor(0,0,0);
