@@ -8,13 +8,11 @@
 #include "func.hpp"
 #include "ofMath.h"
 
-double distance(double x1, double y1, double x2, double y2)
-{
+double distance(double x1, double y1, double x2, double y2){
     return pow(pow(x1 - x2, 2) + pow(y1 - y2, 2),1/2.0);
 }
 
-double* normalize(double* array, int array_size)
-{
+double* normalize(double* array, int array_size){
     if(array)//array IS TRUE IF NOT NULL
     {
         double maximo = array[0];
@@ -32,8 +30,7 @@ double* normalize(double* array, int array_size)
     return array;
 }
 
-double max(double* array, int array_size)
-{
+double max(double* array, int array_size){
     double maximo = array[0];
     //FIND MAXIMUM (1 cycle)
     for (int i = 1; i < array_size; i++)
@@ -41,4 +38,13 @@ double max(double* array, int array_size)
         if (array[i] > maximo) maximo = array[i];
     }
     return maximo;
+}
+
+double get_frequency(double slider_value){
+    // f(x) = m*x + a*b^x
+    double m = 4.;
+    double a = 3;
+    double b = 1.083;
+    
+    return m*slider_value + a*pow(b, slider_value);
 }

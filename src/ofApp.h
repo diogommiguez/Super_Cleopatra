@@ -44,6 +44,7 @@ class ofApp : public ofBaseApp{
         double volume = 0.5;
         vector<double> notes;
         double Filterfreq;
+        double Resonance;
     
         ofxMaxiFilter myFilter;
         bool* wvforms = new bool[3]; // SINE - SQUARE - TRIANGLE

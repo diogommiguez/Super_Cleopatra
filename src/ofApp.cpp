@@ -118,8 +118,9 @@ void ofApp::update(){
     attack = synth_menu.vecSliders[3].get_value()*5.0+1;
     decay = synth_menu.vecSliders[4].get_value()*5.0+1;
     volume = synth_menu.vecSliders[5].get_value()/200.0;
+    Resonance = synth_menu.vecSliders[7].get_value()/5.0;
     
-    Filterfreq = synth_menu.vecSliders[6].get_value()*20;
+    Filterfreq = get_frequency(synth_menu.vecSliders[6].get_value());
     
     wvforms[0] = synth_menu.vecToggles[0].get_status();
     wvforms[1] = synth_menu.vecToggles[1].get_status();
@@ -259,7 +260,7 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
             phase[ball] += 0.05;
         }
             
-            FilteredOutput=myFilter.lores(sample,Filterfreq,0);
+            FilteredOutput=myFilter.lores(sample,Filterfreq,Resonance);
             //if (FilteredOutput > 1) will_normalize = true;
         
             outBuffer[i] = FilteredOutput; // writing to the left channel
