@@ -32,8 +32,9 @@ class ofApp : public ofBaseApp{
         void newBall(int, int);
         void random_v();
         vector <Ball> balls;
-        void open_floor();
+        void floor(bool);
         bool pause;
+        bool _floor = true;
     //audio
         void audioOut(ofSoundBuffer& );
         double envelope(double);
@@ -50,12 +51,14 @@ class ofApp : public ofBaseApp{
         //int nnotes = 7; // numero de notas
        // double notes[7] = {349.23,392.00,415.30,493.88,523.25,600,700};
     //MENUS
-        menu synth_menu;
-        menu mech_menu;
-    
-    // ANIMATE
+        menu synth_menu ;
+        menu mech_menu ;
+
+    // ANIMATIONS
         bool animate = false;
         int animate_count = 0;
-        int animate_cycles = 50;
+        int synth_menu_count = 0;
+        int mech_menu_count = 0;
+        int animate_cycles = 6;
 };
 

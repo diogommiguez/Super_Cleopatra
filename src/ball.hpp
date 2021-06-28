@@ -55,7 +55,6 @@ class Ball : public ofBaseApp{
         void setmouse_g(bool act) {mouse_g = act;};
         bool getmouse_g() {return mouse_g;};
         int nnotes = 7; // numero de notas possíveis
-    
         ofxMaxiOsc Osc_sine;
         ofxMaxiOsc Osc_quad;
         ofxMaxiOsc Osc_trig;
