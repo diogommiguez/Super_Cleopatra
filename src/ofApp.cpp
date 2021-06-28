@@ -11,6 +11,8 @@ void ofApp::setup(){
     ofSoundStreamSetup(2, 0); // 2 output channels (stereo), 0 input channels
     ofSetCircleResolution(100);
     
+    ofSetBackgroundAuto(false);
+    
     // NOTAS ---------------------------------------------
     
     notes.push_back(1046.50*0.25);
@@ -141,10 +143,11 @@ void ofApp::draw(){
 //                 ofMap(animate_count, 0, animate_cycles, 25, 0),
 //                 ofMap(animate_count, 0, animate_cycles, 200, 100));
     
-    colorOne.set(0,0,0);
-    colorTwo.set(0,0,0);
+    int delay = 100;
+    colorOne.setHsb(140,200,200,ofMap(delay,0,100,255,80));
+    colorTwo.setHsb(200,200,200,ofMap(delay,0,100,255,80));
     
-    //ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
+    ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
     
     for(int i =0; i<notes.size(); i++){
         ofSetColor(i*255/notes.size(), 127*(1+sin(i/2.0)), 255-i*255/notes.size());
