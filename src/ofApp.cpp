@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
+    ofSetBackgroundAuto(false);
+    
     attack = 150;
     decay = 200;
     
@@ -117,7 +119,7 @@ void ofApp::update(){
     // ------------------------------------------------
     attack = synth_menu.vecSliders[3].get_value()*5.0+1;
     decay = synth_menu.vecSliders[4].get_value()*5.0+1;
-    volume = synth_menu.vecSliders[5].get_value()/200.0;
+    volume = get_volume((synth_menu.vecSliders[5].get_value()));
     Resonance = synth_menu.vecSliders[7].get_value()/5.0;
     
     Filterfreq = get_frequency(synth_menu.vecSliders[6].get_value());
@@ -142,7 +144,7 @@ void ofApp::draw(){
     colorOne.set(0,0,0);
     colorTwo.set(0,0,0);
     
-    ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
+    //ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
     
     for(int i =0; i<notes.size(); i++){
         ofSetColor(i*255/notes.size(), 127*(1+sin(i/2.0)), 255-i*255/notes.size());
