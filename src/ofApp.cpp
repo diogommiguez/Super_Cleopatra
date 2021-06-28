@@ -36,8 +36,8 @@ void ofApp::setup(){
 
     // SYNTH MENU ---------------------------------------------
 
-    synth_menu.menu_width = 350;
-    synth_menu.menu_height = 210;
+    synth_menu.menu_width = 450;
+    synth_menu.menu_height = 220;
 
     synth_menu.vecToggles.push_back(toggle(synth_menu.menu_x+0*synth_menu.menu_width/10.0+15,synth_menu.menu_y+2*synth_menu.menu_height/3.+40));
     synth_menu.vecToggles.push_back(toggle(synth_menu.menu_x+1*synth_menu.menu_width/10.0+15,synth_menu.menu_y+2*synth_menu.menu_height/3.+40));
@@ -53,27 +53,35 @@ void ofApp::setup(){
     
     synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+8*synth_menu.menu_width/10.0,synth_menu.menu_y+synth_menu.menu_height/3.));
     synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+9*synth_menu.menu_width/10.0,synth_menu.menu_y+synth_menu.menu_height/3.));
-
-
-    // MECHANICS MENU ---------------------------------------------
     
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+8*synth_menu.menu_width/10.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+9*synth_menu.menu_width/10.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+8*synth_menu.menu_width/10.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    synth_menu.vecSliders.push_back(slider(synth_menu.menu_x+9*synth_menu.menu_width/10.0,synth_menu.menu_y+synth_menu.menu_height/3.));
+    
+    synth_menu.vecToggles.push_back(toggle(synth_menu.menu_x+0*synth_menu.menu_width/10.0+15,synth_menu.menu_y+2*synth_menu.menu_height/3.+40));
+    
+    
+    // HELP MENU ---------------------------------------------
+    
+    help_menu.pop_menu = true;
+    
+    help_menu.menu_width = 350;
+    help_menu.menu_height = 120;
+
     // pos inicial em relação ao synth menu
-    mech_menu.menu_x = synth_menu.menu_x;
-    mech_menu.menu_y = synth_menu.menu_y + synth_menu.menu_height + 20;
-    
-//    mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-//    mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-//    mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-//
-//    mech_menu.slider1.setup(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-//    mech_menu.slider2.setup(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-//    mech_menu.slider3.setup(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+    help_menu.menu_x = ofGetWidth()/2.0-help_menu.menu_width/2.0;
+    help_menu.menu_y = ofGetHeight()/2.0-help_menu.menu_height/2.0;
     
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
+    // ------------------------------------------------------------------
+    // ---------------------------- BOLAS -------------------------------
+    // ------------------------------------------------------------------
+    
     for(int i = 0; i<balls.size() and !pause; i++){
         if(balls[i].get_posy()>ofGetHeight()+5){
             balls.erase(balls.begin() + i);
@@ -83,21 +91,37 @@ void ofApp::update(){
         }
         balls[i].evolve();
     }
-    synth_menu.vecToggles[0].setup(synth_menu.menu_x+0*synth_menu.menu_width/10.0+15,synth_menu.menu_y+2*synth_menu.menu_height/3.+40);
-    synth_menu.vecToggles[1].setup(synth_menu.menu_x+1*synth_menu.menu_width/10.0+15,synth_menu.menu_y+2*synth_menu.menu_height/3.+40);
-    synth_menu.vecToggles[2].setup(synth_menu.menu_x+2*synth_menu.menu_width/10.0+15,synth_menu.menu_y+2*synth_menu.menu_height/3.+40);
     
-    synth_menu.vecSliders[0].update(synth_menu.menu_x+0*synth_menu.menu_width/10.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
-    synth_menu.vecSliders[1].update(synth_menu.menu_x+1*synth_menu.menu_width/10.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
-    synth_menu.vecSliders[2].update(synth_menu.menu_x+2*synth_menu.menu_width/10.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
+    // ------------------------------------------------------------------
+    // --------------------- MENU SINTETIZADOR --------------------------
+    // ------------------------------------------------------------------
     
-    synth_menu.vecSliders[3].update(synth_menu.menu_x+4*synth_menu.menu_width/10.0+5,synth_menu.menu_y+synth_menu.menu_height/3.);
-    synth_menu.vecSliders[4].update(synth_menu.menu_x+5*synth_menu.menu_width/10.0+5,synth_menu.menu_y+synth_menu.menu_height/3.);
-    synth_menu.vecSliders[5].update(synth_menu.menu_x+6*synth_menu.menu_width/10.0+5,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecToggles[0].setup(synth_menu.menu_x+0*synth_menu.menu_width/16.0+20,synth_menu.menu_y+2*synth_menu.menu_height/3.+40);
+    synth_menu.vecToggles[1].setup(synth_menu.menu_x+1*synth_menu.menu_width/16.0+20,synth_menu.menu_y+2*synth_menu.menu_height/3.+40);
+    synth_menu.vecToggles[2].setup(synth_menu.menu_x+2*synth_menu.menu_width/16.0+20,synth_menu.menu_y+2*synth_menu.menu_height/3.+40);
     
-    synth_menu.vecSliders[6].update(synth_menu.menu_x+8*synth_menu.menu_width/10.0-3,synth_menu.menu_y+synth_menu.menu_height/3.);
-    synth_menu.vecSliders[7].update(synth_menu.menu_x+9*synth_menu.menu_width/10.0-3,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[0].update(synth_menu.menu_x+0*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[1].update(synth_menu.menu_x+1*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[2].update(synth_menu.menu_x+2*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    
+    synth_menu.vecSliders[3].update(synth_menu.menu_x+4*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[4].update(synth_menu.menu_x+5*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[5].update(synth_menu.menu_x+6*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    
+    synth_menu.vecSliders[6].update(synth_menu.menu_x+8*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[7].update(synth_menu.menu_x+9*synth_menu.menu_width/16.0+20,synth_menu.menu_y+synth_menu.menu_height/3.);
+    
+    synth_menu.vecSliders[8].update(synth_menu.menu_x+11*synth_menu.menu_width/16.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[9].update(synth_menu.menu_x+12*synth_menu.menu_width/16.0+15,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[10].update(synth_menu.menu_x+13*synth_menu.menu_width/16.0+25,synth_menu.menu_y+synth_menu.menu_height/3.);
+    synth_menu.vecSliders[11].update(synth_menu.menu_x+14*synth_menu.menu_width/16.0+25,synth_menu.menu_y+synth_menu.menu_height/3.);
+    
+    synth_menu.vecToggles[3].setup(synth_menu.menu_x+13*synth_menu.menu_width/16.0+5,synth_menu.menu_y+2*synth_menu.menu_height/3.+40);
 
+    // ------------------------------------------------
+    // --------------- PARAMS ANIMACOES ---------------
+    // ------------------------------------------------
+    
     if(animate and animate_count < animate_cycles){
             animate_count++;
     }else if (!animate and animate_count > 0) {
@@ -108,27 +132,24 @@ void ofApp::update(){
     }else if (!(synth_menu.pop_menu) and synth_menu_count > 0) {
         synth_menu_count--;
     }
-//    mech_menu.button1.setup(mech_menu.menu_x+mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-//    mech_menu.button2.setup(mech_menu.menu_x+2*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-//    mech_menu.button3.setup(mech_menu.menu_x+3*mech_menu.menu_width/7.0,mech_menu.menu_y+mech_menu.menu_height/2.0);
-//
-//    mech_menu.slider1.update(mech_menu.menu_x+4*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-//    mech_menu.slider2.update(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
-//    mech_menu.slider3.update(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
+    if(help_menu.pop_menu and help_menu_count < animate_cycles){
+        help_menu_count++;
+    }else if (!(help_menu.pop_menu) and help_menu_count > 0) {
+        help_menu_count--;
+    }
     
     // ------------------------------------------------
     // --------------- PARAMETROS MENUS ---------------
     // ------------------------------------------------
-    attack = synth_menu.vecSliders[3].get_value()*5.0+1;
-    decay = synth_menu.vecSliders[4].get_value()*5.0+1;
-    volume = get_volume((synth_menu.vecSliders[5].get_value()));
-    Resonance = synth_menu.vecSliders[7].get_value()/5.0;
-    
-    Filterfreq = get_frequency(synth_menu.vecSliders[6].get_value());
-    
-    wvforms[0] = synth_menu.vecToggles[0].get_status();
-    wvforms[1] = synth_menu.vecToggles[1].get_status();
-    wvforms[2] = synth_menu.vecToggles[2].get_status();
+    attack      = synth_menu.vecSliders[3].get_value()*5.0+1;
+    decay       = synth_menu.vecSliders[4].get_value()*5.0+1;
+    volume      = get_volume((synth_menu.vecSliders[5].get_value()));
+    Filterfreq  = get_frequency(synth_menu.vecSliders[6].get_value());
+    Resonance   = synth_menu.vecSliders[7].get_value()/5.0;
+
+    wvforms[0]  = synth_menu.vecToggles[0].get_status();
+    wvforms[1]  = synth_menu.vecToggles[1].get_status();
+    wvforms[2]  = synth_menu.vecToggles[2].get_status();
     
 
 }
@@ -143,7 +164,7 @@ void ofApp::draw(){
 //                 ofMap(animate_count, 0, animate_cycles, 25, 0),
 //                 ofMap(animate_count, 0, animate_cycles, 200, 100));
     
-    int delay = 100;
+    int delay = 20;
     colorOne.setHsb(140,200,200,ofMap(delay,0,100,255,80));
     colorTwo.setHsb(200,200,200,ofMap(delay,0,100,255,80));
     
@@ -159,8 +180,10 @@ void ofApp::draw(){
         ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
     }
     
-   // MENU SINTETIZADOR ----------------------------------------------------------------------------------------------------------------------------------
-        
+    // -------------------------------------------------------------------------------------------
+    // --------------------------  MENU SINTETIZADOR  --------------------------------------------
+    // -------------------------------------------------------------------------------------------
+    
     // CAIXINHAS DE MENU -------------
     ofColor color;
 
@@ -170,37 +193,60 @@ void ofApp::draw(){
 
     color.setHsb(0, 0, 150,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
     ofSetColor(color);
-    ofDrawRectangle(synth_menu.menu_x, synth_menu.menu_y, 3*synth_menu.menu_width/10.0+15, synth_menu.menu_height);
-    ofDrawRectangle(synth_menu.menu_x+3*synth_menu.menu_width/10.0+20.0, synth_menu.menu_y, 3*synth_menu.menu_width/10.0+25, synth_menu.menu_height);
-    ofDrawRectangle(synth_menu.menu_x+3*synth_menu.menu_width/5.0+50, synth_menu.menu_y, 3*synth_menu.menu_width/10.0 - 15 , synth_menu.menu_height);
-
+    
+    // ---------------------------------------------------------------
+    ofTranslate(synth_menu.menu_x, synth_menu.menu_y); // BEGIN OF TRANSLATE
+    // ---------------------------------------------------------------
+    
+    ofDrawRectangle(0, 0, 4*synth_menu.menu_width/16.0-2.5, synth_menu.menu_height);
+    ofDrawRectangle(4*synth_menu.menu_width/16.0+2.5, 0, 4*synth_menu.menu_width/16.0-5, synth_menu.menu_height);
+    ofDrawRectangle(8*synth_menu.menu_width/16.0+2.5, 0, 3*synth_menu.menu_width/16.0-5, synth_menu.menu_height);
+    ofDrawRectangle(11*synth_menu.menu_width/16.0+2.5, 0, 5*synth_menu.menu_width/16.0-2.5, synth_menu.menu_height);
+    
     // LETRAS E SIMBOLOS ------------------
-    //ofSetColor(0,0,0);
     color.setHsb(0, 0, 0,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
     ofSetColor(color);
     
-    ofDrawBitmapString("OSC", synth_menu.menu_x+synth_menu.menu_width/6.0,synth_menu.menu_y+synth_menu.menu_height/8.0);
-    ofDrawBitmapString("AMP", synth_menu.menu_x+synth_menu.menu_width/2.0,synth_menu.menu_y+synth_menu.menu_height/8.0);
-    ofDrawBitmapString("FIL", synth_menu.menu_x+5*synth_menu.menu_width/6.0,synth_menu.menu_y+synth_menu.menu_height/8.0);
+    ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
+    ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
+    ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
+    ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-15,synth_menu.menu_height/8.0-5);
     
-    ofDrawCircle(synth_menu.menu_x+0*synth_menu.menu_width/10.0+25,synth_menu.menu_y+synth_menu.menu_height/3.-20, 10);
-    ofDrawRectangle(synth_menu.menu_x+1*synth_menu.menu_width/10.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-30, 20,20);
-    ofDrawTriangle(synth_menu.menu_x+2*synth_menu.menu_width/10.0+15,synth_menu.menu_y+synth_menu.menu_height/3.-30,
-                   synth_menu.menu_x+2*synth_menu.menu_width/10.0+35,synth_menu.menu_y+synth_menu.menu_height/3.-30,
-                   synth_menu.menu_x+2*synth_menu.menu_width/10.0+25,synth_menu.menu_y+synth_menu.menu_height/3.-10);
+    // BOLD LOL
+    ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+    ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+    ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+    ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-14,synth_menu.menu_height/8.0-5);
+    
+    ofDrawBitmapString("REVERB",11*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-28);
+    ofDrawBitmapString("DELAY",13*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-28);
+    
+    ofDrawCircle(0*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-20, 10);
+    ofDrawRectangle(1*synth_menu.menu_width/16.0+20,synth_menu.menu_height/3.-30, 20,20);
+    ofDrawTriangle( 2*synth_menu.menu_width/16.0+20, synth_menu.menu_height/3.-10,
+                    2*synth_menu.menu_width/16.0+30, synth_menu.menu_height/3.-30,
+                    2*synth_menu.menu_width/16.0+40, synth_menu.menu_height/3.-10);
     
     
-    //ofSetColor(0,0,255);
     color.setHsb(170, 255, 255,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
     ofSetColor(color);
     
-    ofDrawBitmapString("ATT", synth_menu.menu_x+4*synth_menu.menu_width/10.0+5,synth_menu.menu_y+synth_menu.menu_height/3.-20);
-    ofDrawBitmapString("DEC",  synth_menu.menu_x+5*synth_menu.menu_width/10.0+5,synth_menu.menu_y+synth_menu.menu_height/3.-20);
-    ofDrawBitmapString("VOL", synth_menu.menu_x+6*synth_menu.menu_width/10.0+5,synth_menu.menu_y+synth_menu.menu_height/3.-20);
+    ofDrawBitmapString("ATT", 4*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+    ofDrawBitmapString("DEC", 5*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+    ofDrawBitmapString("VOL", 6*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
     
-    ofDrawBitmapString("FIL", synth_menu.menu_x+8*synth_menu.menu_width/10.0-5,synth_menu.menu_y+synth_menu.menu_height/3.-20);
-    ofDrawBitmapString("RES", synth_menu.menu_x+9*synth_menu.menu_width/10.0-5,synth_menu.menu_y+synth_menu.menu_height/3.-20);
-
+    ofDrawBitmapString("FIL",8*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+    ofDrawBitmapString("RES",9*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+    
+    ofDrawBitmapString("TIME",11*synth_menu.menu_width/16.0+8,synth_menu.menu_height/3.-10);
+    ofDrawBitmapString("FBK",12*synth_menu.menu_width/16.0+13,synth_menu.menu_height/3.-10);
+    ofDrawBitmapString("SIZE",13*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-10);
+    ofDrawBitmapString("FBK",14*synth_menu.menu_width/16.0+23,synth_menu.menu_height/3.-10);
+   
+    // ---------------------------------------------------------------
+    ofTranslate(-synth_menu.menu_x, -synth_menu.menu_y); // END OF TRANSLATE
+    // ---------------------------------------------------------------
+    
     // TOGGLES E SLIDERS
     for(int i =0; i<synth_menu.vecToggles.size(); i++){
         synth_menu.vecToggles[i].run();
@@ -209,24 +255,61 @@ void ofApp::draw(){
         synth_menu.vecSliders[i].run();
     }
     
+    // -------------------------------------------------------------------------------------------
+    // ----------------------------------   HELP MENU  --------------------------------------------
+    // --------------------------------------------------------------------------------------------
+        
+    ofTranslate(help_menu.menu_x, help_menu.menu_y);
     
-    if(mech_menu.pop_menu){
-        ofSetColor(100,100,100);
-        ofDrawRectangle(mech_menu.menu_x-5, mech_menu.menu_y-5, mech_menu.menu_width+10, mech_menu.menu_height+10);
-        ofSetColor(150,150,150);
-        ofDrawRectangle(mech_menu.menu_x, mech_menu.menu_y, mech_menu.menu_width, mech_menu.menu_height);
-        
-        ofSetColor(0,0,255);
-        // in draw:
-        ofDrawBitmapString("MECHANICS MENU", mech_menu.menu_x+mech_menu.menu_width/2.0-100,mech_menu.menu_y+mech_menu.menu_height/6.0);
-        
-//        mech_menu.button1.run();
-//        mech_menu.button2.run();
-//        mech_menu.button3.run();
-//        mech_menu.slider1.run();
-//        mech_menu.slider2.run();
-//        mech_menu.slider3.run();
-    }
+    color.setHsb(0,0,100,ofMap(help_menu_count, 0, animate_cycles, 0, 255));
+    ofSetColor(color);
+    ofDrawRectangle(-5, -5, help_menu.menu_width+10, help_menu.menu_height+10+30);
+    
+    color.setHsb(140,100,255,ofMap(help_menu_count, 0, animate_cycles, 0, 210));
+    ofSetColor(color);
+    ofDrawRectangle(0, 0, help_menu.menu_width, 25);
+    
+    color.setHsb(200,255,255,ofMap(help_menu_count, 0, animate_cycles, 0, 210));
+    ofSetColor(color);
+    ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-60, 15);
+    ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-59, 15);
+    
+    color.setHsb(0,0,150,ofMap(help_menu_count, 0, animate_cycles, 0, 255));
+    ofSetColor(color);
+    ofDrawRectangle(0, 30, help_menu.menu_width/2.0-2.5, help_menu.menu_height-35);
+    ofDrawRectangle(help_menu.menu_width/2.0+2.5, 30, help_menu.menu_width/2.0-2.5, help_menu.menu_height-35);
+    ofDrawRectangle(0, 30+help_menu.menu_height-30, help_menu.menu_width/2.0-2.5, 30);
+    ofDrawRectangle(help_menu.menu_width/2.0+2.5, 30+help_menu.menu_height-30, help_menu.menu_width/2.0-2.5, 30);
+    
+    color.setHsb(0,0,0,ofMap(help_menu_count, 0, animate_cycles, 0, 150));
+    ofSetColor(color);
+
+    ofDrawBitmapString("b - place ball", 10,45);
+    ofDrawBitmapString("b", 11,45);
+    
+    ofDrawBitmapString("g - ativate force", 10,70);
+    ofDrawBitmapString("g", 11,70);
+    
+    ofDrawBitmapString("v - random\n    velocities", 10,95);
+    ofDrawBitmapString("v", 11,95);
+    
+    ofDrawBitmapString("w - [de]activate\n    walls", help_menu.menu_width/2.0+2.5+10,45);
+    ofDrawBitmapString("w",  help_menu.menu_width/2.0+2.5+11,45);
+    
+    ofDrawBitmapString("o - [de]activate\n    floor", help_menu.menu_width/2.0+2.5+10,75);
+    ofDrawBitmapString("o",  help_menu.menu_width/2.0+2.5+11,75);
+    
+    ofDrawBitmapString("SPACEBAR - pause", help_menu.menu_width/2.0+2.5+10,105);
+    ofDrawBitmapString("SPACEBAR",  help_menu.menu_width/2.0+2.5+11,105);
+    
+    ofDrawBitmapString("m - open/close\n    synth menu", 10,133);
+    ofDrawBitmapString("m", 11,133);
+    
+    ofDrawBitmapString("h - open/close\n    this menu", help_menu.menu_width/2.0+2.5+10,133);
+    ofDrawBitmapString("h",  help_menu.menu_width/2.0+2.5+11,133);
+    
+    ofTranslate(-help_menu.menu_x, -help_menu.menu_y);
+
 }
 
 
@@ -292,9 +375,13 @@ double ofApp::envelope(double phase){
 
 //--------------------------------------------------------------
 void ofApp::random_v(){
+    double mod;
+    double ang;
     for(int i = 0; i<balls.size(); i++){
-        balls[i].set_v_x(ofRandom(-1000,1000));
-        balls[i].set_v_y(ofRandom(-2000,0));
+        mod = ofRandom(300,2000);
+        ang = ofRandom(0,2*PI);
+        balls[i].set_v_x(balls[i].get_v_x()+mod*cos(ang));
+        balls[i].set_v_y(balls[i].get_v_y()+mod*sin(ang));
     }
 }
 
@@ -328,8 +415,8 @@ void ofApp::keyPressed(int key){
         case 'm':
             (synth_menu.pop_menu == false) ? synth_menu.pop_menu = true : synth_menu.pop_menu = false;
             break;
-        case 'n':
-            (mech_menu.pop_menu == false) ? mech_menu.pop_menu = true : mech_menu.pop_menu = false;
+        case 'h':
+            (help_menu.pop_menu == false) ? help_menu.pop_menu = true : help_menu.pop_menu = false;
             break;
         case ' ':
             (pause == false) ? pause = true : pause = false;
@@ -339,6 +426,16 @@ void ofApp::keyPressed(int key){
             _floor = !_floor;
             floor(_floor);
             break;
+        case 'w':
+            close_walls();
+            break;
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::close_walls(){
+    for(int i =0; i<balls.size(); i++){
+        balls[i].set_closed_walls();
     }
 }
 
@@ -371,9 +468,9 @@ void ofApp::mouseDragged(int x, int y, int button){
     if(synth_menu.pop_menu and synth_menu.dragged){
         synth_menu.menu_x = ofGetMouseX()-synth_menu.drag_distx;
         synth_menu.menu_y = ofGetMouseY()-synth_menu.drag_disty;
-    } else if(mech_menu.pop_menu and mech_menu.dragged){
-        mech_menu.menu_x = ofGetMouseX()-mech_menu.drag_distx;
-        mech_menu.menu_y = ofGetMouseY()-mech_menu.drag_disty;
+    } else if(help_menu.pop_menu and help_menu.dragged){
+        help_menu.menu_x = ofGetMouseX()-help_menu.drag_distx;
+        help_menu.menu_y = ofGetMouseY()-help_menu.drag_disty;
     }
 }
 
@@ -383,17 +480,17 @@ void ofApp::mousePressed(int x, int y, int button){
         synth_menu.drag_distx = ofGetMouseX()-synth_menu.menu_x;
         synth_menu.drag_disty = ofGetMouseY()-synth_menu.menu_y;
         synth_menu.dragged = true;
-    } else if(mech_menu.pop_menu and x>mech_menu.menu_x and x<mech_menu.menu_x+mech_menu.menu_width and y>mech_menu.menu_y and y<mech_menu.menu_y+25){
-        mech_menu.drag_distx = ofGetMouseX()-mech_menu.menu_x;
-        mech_menu.drag_disty = ofGetMouseY()-mech_menu.menu_y;
-        mech_menu.dragged = true;
+    } else if(help_menu.pop_menu and x>help_menu.menu_x and x<help_menu.menu_x+help_menu.menu_width and y>help_menu.menu_y and y<help_menu.menu_y+25){
+        help_menu.drag_distx = ofGetMouseX()-help_menu.menu_x;
+        help_menu.drag_disty = ofGetMouseY()-help_menu.menu_y;
+        help_menu.dragged = true;
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
     synth_menu.dragged = false;
-    mech_menu.dragged = false;
+    help_menu.dragged = false;
 }
 
 //--------------------------------------------------------------

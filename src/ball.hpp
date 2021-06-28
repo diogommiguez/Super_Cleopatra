@@ -29,6 +29,7 @@ class Ball : public ofBaseApp{
         double dt = 1.0/SAMPLE_RATE;
     // variaveis booleanas / flags
         bool closed_floor = true; // chão está ou não a deixar passar as bolas
+        bool closed_walls = true;
         bool caught = false; // a bola atual encontra-se ou não "capturada" pelo rato
         bool mouse_g = false; // a bola é graviticamente atraída ou não pelo rato
     // parametros musicais
@@ -47,9 +48,11 @@ class Ball : public ofBaseApp{
         const double get_posy();
         const int get_radius();
         const ofColor get_color();
+        const double get_v_x() {return v_x;};
         const double get_v_y();
         void evolve();
         void set_closed_floor(bool val) {closed_floor = val;};
+        void set_closed_walls() {closed_walls = !closed_walls;};
         int getNote();
         bool hit_note = false;
         void setmouse_g(bool act) {mouse_g = act;};

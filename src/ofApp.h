@@ -35,6 +35,7 @@ class ofApp : public ofBaseApp{
         void floor(bool);
         bool pause;
         bool _floor = true;
+        void close_walls();
     //audio
         void audioOut(ofSoundBuffer& );
         double envelope(double);
@@ -53,13 +54,13 @@ class ofApp : public ofBaseApp{
        // double notes[7] = {349.23,392.00,415.30,493.88,523.25,600,700};
     //MENUS
         menu synth_menu ;
-        menu mech_menu ;
+        menu help_menu ;
 
     // ANIMATIONS
         bool animate = false;
         int animate_count = 0;
         int synth_menu_count = 0;
-        int mech_menu_count = 0;
+        int help_menu_count = 0;
         int animate_cycles = 6;
 };
 

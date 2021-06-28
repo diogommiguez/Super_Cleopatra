@@ -90,40 +90,46 @@ void Ball::evolve(){
         caught = true;
     } else {
       
-    caught = false;
-    hit_note = false;
+        caught = false;
+        hit_note = false;
 
-    double aux_x = posx;
-    double aux_y = posy;
+        double aux_x = posx;
+        double aux_y = posy;
 
-    int gravity = (mouse_g==true)? 1 : 0 ;
+        int gravity = (mouse_g==true)? 1 : 0 ;
+            
+        posx += dt*v_x + gravity*dt*dt*a*(ofGetMouseX()-posx)/(0.01+abs(pow(ofGetMouseX()-posx,1)));
+        posy += dt*v_y + dt*dt*(g+gravity*(ofGetMouseY()-posy)*a/(0.01+abs(pow(ofGetMouseY()-posy,1))));
+
+        v_x= (posx-aux_x)/dt;
+        v_y= (posy-aux_y)/dt;
         
-    posx += dt*v_x + gravity*dt*dt*a*(ofGetMouseX()-posx)/(0.01+abs(pow(ofGetMouseX()-posx,1)));
-    posy += dt*v_y + dt*dt*(g+gravity*(ofGetMouseY()-posy)*a/(0.01+abs(pow(ofGetMouseY()-posy,1))));
-
-    v_x= (posx-aux_x)/dt;
-    v_y= (posy-aux_y)/dt;
-    
-    if(posy >ofGetHeight()-radius-15 && closed_floor ){
-            hit_note = true;
-            posy = ofGetHeight()-radius-15;
-            set_v_y(-get_v_y());
-            //note = notes[(int)(posx*nnotes/ofGetWidth())];
-            note = (int)(posx*nnotes/ofGetWidth());
+        if(posy >ofGetHeight()-radius-15 && closed_floor ){
+                hit_note = true;
+                posy = ofGetHeight()-radius-15;
+                set_v_y(-get_v_y());
+                //note = notes[(int)(posx*nnotes/ofGetWidth())];
+                note = (int)(posx*nnotes/ofGetWidth());
+            }
+        // CONDIÇÕES FRONTEIRA
+        if(posx > ofGetWidth()){
+            if(closed_walls) {
+                posx = ofGetWidth();
+                v_x *= -1;
+            } else
+                posx -= ofGetWidth();
         }
-    // CONDIÇÕES FRONTEIRA
-    if(posx > ofGetWidth()){
-        posx = ofGetWidth();
-        v_x *= -1;
-        //posx -= ofGetWidth();
+        if(posx < 0){
+            if(closed_walls) {
+                posx = 0;
+                v_x *= -1;
+            } else
+                posx += ofGetWidth();
+        }
     }
-    if(posx < 0){
-        posx = 0;
-        v_x *= -1;
-        //posx += ofGetWidth();
-    }
-      
-    }
+    double energy = 0.5*(v_x*v_x+v_y*v_y) + g*(ofGetHeight()-15-posy);
+    cout << "energy = " << energy << endl;
+    
 }
 
 //--------------------------------------------------------------
