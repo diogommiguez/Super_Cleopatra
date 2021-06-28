@@ -21,12 +21,6 @@ void ofApp::setup(){
     notes.push_back(2793.83);
     notes.push_back(3135.96);
     notes.push_back(3520.00);
-    
-    notes.push_back(1046.50*3);
-    notes.push_back(1174.66*3);
-    notes.push_back(1396.91*3);
-    notes.push_back(1567.98*3);
-    notes.push_back(1760.00*3);
 
     // SYNTH MENU ---------------------------------------------
 
@@ -92,18 +86,16 @@ void ofApp::update(){
 //    mech_menu.slider2.update(mech_menu.menu_x+5*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
 //    mech_menu.slider3.update(mech_menu.menu_x+6*mech_menu.menu_width/7.0,mech_menu.menu_y+25);
     
-    attack = synth_menu.vecSliders[3].get_value()*5.0+1;
-    decay = synth_menu.vecSliders[4].get_value()*5.0+1;
+    attack = synth_menu.vecSliders[3].get_value()*10.0+1;
+    decay = synth_menu.vecSliders[4].get_value()*10.0+1;
     volume = synth_menu.vecSliders[6].get_value()/200.0;
-    Filterfreq = synth_menu.vecSliders[5].get_value()*20;
-
+    Filterfreq = synth_menu.vecSliders[5].get_value()*40;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofColor colorOne(50, 25,200);
-    ofColor colorTwo(0, 0,50);
-    //ofColor colorTwo(150, 20, 150);
+    ofColor colorTwo(150, 20, 150);
 
     ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
 
@@ -174,7 +166,6 @@ void ofApp::draw(){
 void ofApp::audioOut( ofSoundBuffer &outBuffer) {
     float sample;
     float FilteredOutput;
-
     for(int i = 0; i < outBuffer.size(); i += 2) {
         sample=0;
         for(int ball=0; ball < balls.size() ;ball++)
@@ -186,9 +177,10 @@ void ofApp::audioOut( ofSoundBuffer &outBuffer) {
                               )*envelope(phase[ball]); // generating a sine wave sample
             phase[ball] += 0.05;
         }
-            FilteredOutput=myFilter.lores(sample,Filterfreq,1);
-            outBuffer[i] = FilteredOutput; // writing to the left channel
-            outBuffer[i + 1] = FilteredOutput; // writing to the right channel
+        //float sample = sin(phase[0]);//*envelope(phase[0]); // generating a sine wave sample
+        FilteredOutput=myFilter.lores(sample,Filterfreq,1);
+        outBuffer[i] = FilteredOutput; // writing to the left channel
+        outBuffer[i + 1] = FilteredOutput; // writing to the right channel
     }
 }
 
@@ -258,7 +250,7 @@ void ofApp::newBall(int xball, int yball){
     Ball myball;
     myball.set_posx(xball);
     myball.set_posy(yball);
-    myball.set_radius(ofRandom(10,20));
+    myball.set_radius(ofRandom(30,40));
     myball.set_color(ofRandom(0,255));
     myball.nnotes = notes.size();
     
