@@ -5,12 +5,14 @@ void ofApp::setup(){
     
     ofSetBackgroundAuto(false);
     ofSetCircleResolution(100);
+
+    attack = 150;
+    decay = 200;
     
     // AUDIO DRIVER---------------------------------------
     ofSoundStreamListDevices(); //--> PRINT O DEVICE QUE A GENTE QUER USAR PARA O OUTPUT. DEFAULTS TO AS COLUnAS DO Pêssê
-    //soundstream.setDeviceID(2); //-->BLACKHOLE
+    soundstream.setDeviceID(0); //-->BLACKHOLE
     soundstream.setup(this, 2, 0, 44100, 512, 4); // 2 output channels (stereo), 0 input channels
-    
     
     // NOTAS ---------------------------------------------
     
@@ -66,11 +68,18 @@ void ofApp::setup(){
     help_menu.pop_menu = true;
     
     help_menu.menu_width = 350;
-    help_menu.menu_height = 120;
+    help_menu.menu_height = 150;
 
     // pos inicial em relação ao synth menu
     help_menu.menu_x = ofGetWidth()/2.0-help_menu.menu_width/2.0;
     help_menu.menu_y = ofGetHeight()/2.0-help_menu.menu_height/2.0;
+    
+    // STATS MENU ---------------------------------------------
+    stats_menu.menu_width = 100;
+    stats_menu.menu_height = 110;
+    
+    stats_menu.menu_x = ofGetWidth()-2*stats_menu.menu_width;
+    stats_menu.menu_y = stats_menu.menu_height;
     
 }
 
@@ -136,6 +145,11 @@ void ofApp::update(){
     }else if (!(help_menu.pop_menu) and help_menu_count > 0) {
         help_menu_count--;
     }
+    if(stats_menu.pop_menu and stats_menu_count < animate_cycles){
+        stats_menu_count++;
+    }else if (!(stats_menu.pop_menu) and stats_menu_count > 0) {
+        stats_menu_count--;
+    }
     
     // ------------------------------------------------
     // --------------- PARAMETROS MENUS ---------------
@@ -150,7 +164,6 @@ void ofApp::update(){
     wvforms[1]  = synth_menu.vecToggles[1].get_status();
     wvforms[2]  = synth_menu.vecToggles[2].get_status();
     
-
 }
 
 //--------------------------------------------------------------
@@ -163,9 +176,8 @@ void ofApp::draw(){
 //                 ofMap(animate_count, 0, animate_cycles, 25, 0),
 //                 ofMap(animate_count, 0, animate_cycles, 200, 100));
     
-    int delay = 20;
-    colorOne.setHsb(140,200,200,ofMap(delay,0,100,255,80));
-    colorTwo.setHsb(200,200,200,ofMap(delay,0,100,255,80));
+    colorOne.setHsb(140,200,240,255);//ofMap(decay,1,501,255,80));
+    colorTwo.setHsb(200,200,200,255);//ofMap(decay,1,501,255,80));
     
     ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_LINEAR);
     
@@ -179,136 +191,258 @@ void ofApp::draw(){
         ofDrawCircle(balls[i].get_posx(), balls[i].get_posy(), balls[i].get_radius());
     }
     
+    ofColor color;
+
     // -------------------------------------------------------------------------------------------
     // --------------------------  MENU SINTETIZADOR  --------------------------------------------
     // -------------------------------------------------------------------------------------------
     
     // CAIXINHAS DE MENU -------------
-    ofColor color;
 
-    color.setHsb(0, 0, 100,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
-    ofSetColor(color);
-    ofDrawRectangle(synth_menu.menu_x-5, synth_menu.menu_y-5, synth_menu.menu_width+10, synth_menu.menu_height+10);
+    if(synth_menu_count>0){
+        color.setHsb(0, 0, 100,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        ofDrawRectangle(synth_menu.menu_x-5, synth_menu.menu_y-5, synth_menu.menu_width+10, synth_menu.menu_height+10);
 
-    color.setHsb(0, 0, 150,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
-    ofSetColor(color);
-    
-    // ---------------------------------------------------------------
-    ofTranslate(synth_menu.menu_x, synth_menu.menu_y); // BEGIN OF TRANSLATE
-    // ---------------------------------------------------------------
-    
-    ofDrawRectangle(0, 0, 4*synth_menu.menu_width/16.0-2.5, synth_menu.menu_height);
-    ofDrawRectangle(4*synth_menu.menu_width/16.0+2.5, 0, 4*synth_menu.menu_width/16.0-5, synth_menu.menu_height);
-    ofDrawRectangle(8*synth_menu.menu_width/16.0+2.5, 0, 3*synth_menu.menu_width/16.0-5, synth_menu.menu_height);
-    ofDrawRectangle(11*synth_menu.menu_width/16.0+2.5, 0, 5*synth_menu.menu_width/16.0-2.5, synth_menu.menu_height);
-    
-    // LETRAS E SIMBOLOS ------------------
-    color.setHsb(0, 0, 0,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
-    ofSetColor(color);
-    
-    ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
-    ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
-    ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
-    ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-15,synth_menu.menu_height/8.0-5);
-    
-    // BOLD LOL
-    ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
-    ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
-    ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
-    ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-14,synth_menu.menu_height/8.0-5);
-    
-    ofDrawBitmapString("REVERB",11*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-28);
-    ofDrawBitmapString("DELAY",13*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-28);
-    
-    ofDrawCircle(0*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-20, 10);
-    ofDrawRectangle(1*synth_menu.menu_width/16.0+20,synth_menu.menu_height/3.-30, 20,20);
-    ofDrawTriangle( 2*synth_menu.menu_width/16.0+20, synth_menu.menu_height/3.-10,
-                    2*synth_menu.menu_width/16.0+30, synth_menu.menu_height/3.-30,
-                    2*synth_menu.menu_width/16.0+40, synth_menu.menu_height/3.-10);
-    
-    
-    color.setHsb(170, 255, 255,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
-    ofSetColor(color);
-    
-    ofDrawBitmapString("ATT", 4*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-    ofDrawBitmapString("DEC", 5*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-    ofDrawBitmapString("VOL", 6*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-    
-    ofDrawBitmapString("FIL",8*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-    ofDrawBitmapString("RES",9*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-    
-    ofDrawBitmapString("TIME",11*synth_menu.menu_width/16.0+8,synth_menu.menu_height/3.-10);
-    ofDrawBitmapString("FBK",12*synth_menu.menu_width/16.0+13,synth_menu.menu_height/3.-10);
-    ofDrawBitmapString("SIZE",13*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-10);
-    ofDrawBitmapString("FBK",14*synth_menu.menu_width/16.0+23,synth_menu.menu_height/3.-10);
-   
-    // ---------------------------------------------------------------
-    ofTranslate(-synth_menu.menu_x, -synth_menu.menu_y); // END OF TRANSLATE
-    // ---------------------------------------------------------------
-    
-    // TOGGLES E SLIDERS
-    for(int i =0; i<synth_menu.vecToggles.size(); i++){
-        synth_menu.vecToggles[i].run();
-    }
-    for(int i =0; i<synth_menu.vecSliders.size(); i++){
-        synth_menu.vecSliders[i].run();
+        color.setHsb(0, 0, 150,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        
+        // ---------------------------------------------------------------
+        ofTranslate(synth_menu.menu_x, synth_menu.menu_y); // BEGIN OF TRANSLATE
+        // ---------------------------------------------------------------
+        
+        ofDrawRectangle(0, 0, 4*synth_menu.menu_width/16.0-2.5, synth_menu.menu_height);
+        ofDrawRectangle(4*synth_menu.menu_width/16.0+2.5, 0, 4*synth_menu.menu_width/16.0-5, synth_menu.menu_height);
+        ofDrawRectangle(8*synth_menu.menu_width/16.0+2.5, 0, 3*synth_menu.menu_width/16.0-5, synth_menu.menu_height);
+        ofDrawRectangle(11*synth_menu.menu_width/16.0+2.5, 0, 5*synth_menu.menu_width/16.0-2.5, synth_menu.menu_height);
+        
+        // LETRAS E SIMBOLOS ------------------
+        color.setHsb(0, 0, 0,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        
+        ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
+        ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
+        ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
+        ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-15,synth_menu.menu_height/8.0-5);
+        
+        // BOLD LOL
+        ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+        ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+        ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+        ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-14,synth_menu.menu_height/8.0-5);
+        
+        ofDrawBitmapString("REVERB",11*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-28);
+        ofDrawBitmapString("DELAY",13*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-28);
+        
+        ofDrawCircle(0*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-20, 10);
+        ofDrawRectangle(1*synth_menu.menu_width/16.0+20,synth_menu.menu_height/3.-30, 20,20);
+        ofDrawTriangle( 2*synth_menu.menu_width/16.0+20, synth_menu.menu_height/3.-10,
+                        2*synth_menu.menu_width/16.0+30, synth_menu.menu_height/3.-30,
+                        2*synth_menu.menu_width/16.0+40, synth_menu.menu_height/3.-10);
+        
+        
+        color.setHsb(170, 255, 255,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        
+        ofDrawBitmapString("ATT", 4*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        ofDrawBitmapString("DEC", 5*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        ofDrawBitmapString("VOL", 6*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        
+        ofDrawBitmapString("FIL",8*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        ofDrawBitmapString("RES",9*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        
+        ofDrawBitmapString("TIME",11*synth_menu.menu_width/16.0+8,synth_menu.menu_height/3.-10);
+        ofDrawBitmapString("FBK",12*synth_menu.menu_width/16.0+13,synth_menu.menu_height/3.-10);
+        ofDrawBitmapString("SIZE",13*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-10);
+        ofDrawBitmapString("FBK",14*synth_menu.menu_width/16.0+23,synth_menu.menu_height/3.-10);
+       
+        // ---------------------------------------------------------------
+        ofTranslate(-synth_menu.menu_x, -synth_menu.menu_y); // END OF TRANSLATE
+        // ---------------------------------------------------------------
+        
+        // TOGGLES E SLIDERS
+        for(int i =0; i<synth_menu.vecToggles.size(); i++){
+            synth_menu.vecToggles[i].run();
+        }
+        for(int i =0; i<synth_menu.vecSliders.size(); i++){
+            synth_menu.vecSliders[i].run();
+        }
     }
     
     // -------------------------------------------------------------------------------------------
     // ----------------------------------   HELP MENU  --------------------------------------------
     // --------------------------------------------------------------------------------------------
         
-    ofTranslate(help_menu.menu_x, help_menu.menu_y);
-    
-    color.setHsb(0,0,100,ofMap(help_menu_count, 0, animate_cycles, 0, 255));
-    ofSetColor(color);
-    ofDrawRectangle(-5, -5, help_menu.menu_width+10, help_menu.menu_height+10+30);
-    
-    color.setHsb(140,100,255,ofMap(help_menu_count, 0, animate_cycles, 0, 210));
-    ofSetColor(color);
-    ofDrawRectangle(0, 0, help_menu.menu_width, 25);
-    
-    color.setHsb(200,255,255,ofMap(help_menu_count, 0, animate_cycles, 0, 210));
-    ofSetColor(color);
-    ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-60, 15);
-    ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-59, 15);
-    
-    color.setHsb(0,0,150,ofMap(help_menu_count, 0, animate_cycles, 0, 255));
-    ofSetColor(color);
-    ofDrawRectangle(0, 30, help_menu.menu_width/2.0-2.5, help_menu.menu_height-35);
-    ofDrawRectangle(help_menu.menu_width/2.0+2.5, 30, help_menu.menu_width/2.0-2.5, help_menu.menu_height-35);
-    ofDrawRectangle(0, 30+help_menu.menu_height-30, help_menu.menu_width/2.0-2.5, 30);
-    ofDrawRectangle(help_menu.menu_width/2.0+2.5, 30+help_menu.menu_height-30, help_menu.menu_width/2.0-2.5, 30);
-    
-    color.setHsb(0,0,0,ofMap(help_menu_count, 0, animate_cycles, 0, 150));
-    ofSetColor(color);
+    if(help_menu_count>0){
+        ofTranslate(help_menu.menu_x, help_menu.menu_y);
+        
+        color.setHsb(0,0,100,ofMap(help_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        ofDrawRectangle(-5, -5, help_menu.menu_width+10, help_menu.menu_height+10+30);
+        
+        color.setHsb(140,100,255,ofMap(help_menu_count, 0, animate_cycles, 0, 210));
+        ofSetColor(color);
+        ofDrawRectangle(0, 0, help_menu.menu_width, 25);
+        
+        color.setHsb(200,255,255,ofMap(help_menu_count, 0, animate_cycles, 0, 210));
+        ofSetColor(color);
+        ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-60, 15);
+        ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-59, 15);
+        
+        color.setHsb(0,0,150,ofMap(help_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        ofDrawRectangle(0, 30, help_menu.menu_width/2.0-2.5, help_menu.menu_height-35-30);
+        ofDrawRectangle(help_menu.menu_width/2.0+2.5, 30, help_menu.menu_width/2.0-2.5, help_menu.menu_height-35-30);
+        
+        ofDrawRectangle(0, 30+help_menu.menu_height-30-30, help_menu.menu_width/2.0-2.5, 30);
+        ofDrawRectangle(help_menu.menu_width/2.0+2.5, 30+help_menu.menu_height-30-30, help_menu.menu_width/2.0-2.5, 30);
+        
+        ofDrawRectangle(0, 30+help_menu.menu_height-30, help_menu.menu_width/2.0-2.5, 30);
+        ofDrawRectangle(help_menu.menu_width/2.0+2.5, 30+help_menu.menu_height-30, help_menu.menu_width/2.0-2.5, 30);
+        
+        color.setHsb(0,0,0,ofMap(help_menu_count, 0, animate_cycles, 0, 150));
+        ofSetColor(color);
 
-    ofDrawBitmapString("b - place ball", 10,45);
-    ofDrawBitmapString("b", 11,45);
+        ofDrawBitmapString("b - place ball", 10,45);
+        ofDrawBitmapString("b", 11,45);
+        
+        ofDrawBitmapString("Numbers - change\n           scale", 10,70);
+        ofDrawBitmapString("Numbers", 11,70);
+        
+        ofDrawBitmapString("v - random\n    velocities", 10,95);
+        ofDrawBitmapString("v", 11,95);
+        
+        ofDrawBitmapString("w - [de]activate\n    walls", help_menu.menu_width/2.0+2.5+10,45);
+        ofDrawBitmapString("w",  help_menu.menu_width/2.0+2.5+11,45);
+        
+        ofDrawBitmapString("o - [de]activate\n    floor", help_menu.menu_width/2.0+2.5+10,75);
+        ofDrawBitmapString("o",  help_menu.menu_width/2.0+2.5+11,75);
+        
+        ofDrawBitmapString("g - ativate force", help_menu.menu_width/2.0+2.5+10,105);
+        ofDrawBitmapString("g",  help_menu.menu_width/2.0+2.5+11,105);
+        
+        ofDrawBitmapString("SPACEBAR - pause", 10,142);
+        ofDrawBitmapString("SPACEBAR", 11,142);
+        // agora!
+        ofDrawBitmapString("q - quit", 10,137+25);
+        ofDrawBitmapString("q", 11,137+25);
+        
+        ofDrawBitmapString("m - open/close\n    synth menu",help_menu.menu_width/2.0+2.5+10,137);
+        ofDrawBitmapString("m", help_menu.menu_width/2.0+2.5+11,137);
+        
+        ofDrawBitmapString("h - open/close\n    this menu", help_menu.menu_width/2.0+2.5+10,137+25);
+        ofDrawBitmapString("h",  help_menu.menu_width/2.0+2.5+11,137+25);
+        
+        ofTranslate(-help_menu.menu_x, -help_menu.menu_y);
+    }
     
-    ofDrawBitmapString("g - ativate force", 10,70);
-    ofDrawBitmapString("g", 11,70);
-    
-    ofDrawBitmapString("v - random\n    velocities", 10,95);
-    ofDrawBitmapString("v", 11,95);
-    
-    ofDrawBitmapString("w - [de]activate\n    walls", help_menu.menu_width/2.0+2.5+10,45);
-    ofDrawBitmapString("w",  help_menu.menu_width/2.0+2.5+11,45);
-    
-    ofDrawBitmapString("o - [de]activate\n    floor", help_menu.menu_width/2.0+2.5+10,75);
-    ofDrawBitmapString("o",  help_menu.menu_width/2.0+2.5+11,75);
-    
-    ofDrawBitmapString("SPACEBAR - pause", help_menu.menu_width/2.0+2.5+10,105);
-    ofDrawBitmapString("SPACEBAR",  help_menu.menu_width/2.0+2.5+11,105);
-    
-    ofDrawBitmapString("m - open/close\n    synth menu", 10,133);
-    ofDrawBitmapString("m", 11,133);
-    
-    ofDrawBitmapString("h - open/close\n    this menu", help_menu.menu_width/2.0+2.5+10,133);
-    ofDrawBitmapString("h",  help_menu.menu_width/2.0+2.5+11,133);
-    
-    ofTranslate(-help_menu.menu_x, -help_menu.menu_y);
+    // -------------------------------------------------------------------------------------------
+    // ---------------------------------  STATS MENU  --------------------------------------------
+    // -------------------------------------------------------------------------------------------
+        
+    if(stats_menu_count>0){
+        ofTranslate(stats_menu.menu_x, stats_menu.menu_y);
+        
+        color.setHsb(0,0,100,ofMap(stats_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        ofDrawRectangle(-5, -5, stats_menu.menu_width+10, stats_menu.menu_height+10+30);
+        
+        color.setHsb(140,100,255,ofMap(stats_menu_count, 0, animate_cycles, 0, 210));
+        ofSetColor(color);
+        ofDrawRectangle(0, 0, stats_menu.menu_width, 25);
+        
+        color.setHsb(200,255,255,ofMap(stats_menu_count, 0, animate_cycles, 0, 210));
+        ofSetColor(color);
+        ofDrawBitmapString("STATS", stats_menu.menu_width/2.0-20, 15);
+        ofDrawBitmapString("STATS", stats_menu.menu_width/2.0-21, 15);
+        
+        color.setHsb(0,0,150,ofMap(stats_menu_count, 0, animate_cycles, 0, 255));
+        ofSetColor(color);
+        ofDrawRectangle(0, 30, stats_menu.menu_width, stats_menu.menu_height);
+        
+        color.setHsb(0,0,0,ofMap(stats_menu_count, 0, animate_cycles, 0, 150));
+        ofSetColor(color);
 
+        ofDrawBitmapString("Nballs", 10,45);
+        ofDrawBitmapString("Nballs", 11,45);
+        
+        string nballs = to_string(balls.size());
+        
+        ofDrawBitmapString(nballs, 80,45);
+        ofDrawBitmapString(nballs, 80,45);
+        
+        if(_g) {
+        ofDrawBitmapString("Force   ON", 10,65);
+        ofDrawBitmapString("Force   ON", 11,65);
+        } else {
+            ofDrawBitmapString("Force  OFF", 10,65);
+            ofDrawBitmapString("Force  OFF", 11,65);
+        }
+        
+        if(_floor){
+        ofDrawBitmapString("Floor   ON", 10,85);
+        ofDrawBitmapString("Floor   ON", 11,85);
+        } else {
+            ofDrawBitmapString("Floor  OFF", 10,85);
+            ofDrawBitmapString("Floor  OFF", 11,85);
+        }
+        
+        if(_walls){
+        ofDrawBitmapString("Walls   ON", 10,105);
+        ofDrawBitmapString("Walls   ON", 11,105);
+        } else {
+            ofDrawBitmapString("Walls  OFF", 10,105);
+            ofDrawBitmapString("Walls  OFF", 11,105);
+        }
+        
+        ofDrawBitmapString("Notes ", 10,125);
+        ofDrawBitmapString("Notes ", 11,125);
+        
+        switch(note_sel) {
+            case 1:
+                ofDrawBitmapString("PENTA ", 56,125);
+                ofDrawBitmapString("PENTA ", 57,125);
+                break;
+            case 2:
+                ofDrawBitmapString("Cm7 ", 70,125);
+                ofDrawBitmapString("Cm7 ", 71,125);
+                break;
+            case 3:
+                ofDrawBitmapString("Fm7 ", 70,125);
+                ofDrawBitmapString("Fm7 ", 71,125);
+                break;
+            case 4:
+                ofDrawBitmapString("Bb7 ", 70,125);
+                ofDrawBitmapString("Bb7 ", 71,125);
+                break;
+            case 5:
+                ofDrawBitmapString("EbM7 ", 66,125);
+                ofDrawBitmapString("EbM7 ", 67,125);
+                break;
+            case 6:
+                ofDrawBitmapString("AbM7 ", 66,125);
+                ofDrawBitmapString("AbM7 ", 67,125);
+                break;
+            case 7:
+                ofDrawBitmapString("DbM7 ", 66,125);
+                ofDrawBitmapString("DbM7 ", 67,125);
+                break;
+            case 8:
+                ofDrawBitmapString("Gm7 ", 70,125);
+                ofDrawBitmapString("Gm7 ", 71,125);
+                break;
+            case 9:
+                ofDrawBitmapString("F ", 75,125);
+                ofDrawBitmapString("F ", 76 ,125);
+                break;
+            case 0:
+                ofDrawBitmapString("G7b6 ", 66,125);
+                ofDrawBitmapString("G7b6 ", 67,125);
+                break;
+        }
+        
+        ofTranslate(-stats_menu.menu_x, -stats_menu.menu_y);
+    }
 }
 
 
@@ -379,8 +513,10 @@ void ofApp::random_v(){
     for(int i = 0; i<balls.size(); i++){
         mod = ofRandom(300,2000);
         ang = ofRandom(0,2*PI);
-        balls[i].set_v_x(balls[i].get_v_x()+mod*cos(ang));
-        balls[i].set_v_y(balls[i].get_v_y()+mod*sin(ang));
+//        balls[i].set_v_x(balls[i].get_v_x()+mod*cos(ang));
+//        balls[i].set_v_y(balls[i].get_v_y()+mod*sin(ang));
+        balls[i].set_v_x(balls[i].get_v_x()+((int)ofRandom(-10,10))*100);
+        balls[i].set_v_y(balls[i].get_v_x()+((int)ofRandom(-20,5))*100);
     }
 }
 
@@ -388,6 +524,210 @@ void ofApp::random_v(){
 void ofApp::floor(bool value){
     for(int i = 0; i<balls.size(); i++){
         balls[i].set_closed_floor(value);
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::setNotes(int escala){
+    switch(escala) {
+        case 1:
+            notes[0]=(1046.50*0.25);
+            notes[1]=(1174.66*0.25);
+            notes[2]=(1396.91*0.25);
+            notes[3]=(1567.98*0.25);
+            notes[4]=(1760.00*0.25);
+            
+            notes[5]=(1046.50*0.5);
+            notes[6]=(1174.66*0.5);
+            notes[7]=(1396.91*0.5);
+            notes[8]=(1567.98*0.5);
+            notes[9]=(1760.00*0.5);
+            
+            notes[10]=(1046.50);
+            notes[11]=(1174.66);
+            notes[12]=(1396.91);
+            notes[13]=(1567.98);
+            notes[14]=(1760.00);
+            break;
+        case 2:
+            notes[0]=(1046.50*0.25);
+            notes[1]=(1244.51*0.25);
+            notes[2]=(1567.98*0.25);
+            notes[3]=(1864.66*0.25);
+            
+            notes[4]=(1046.50*0.55);
+            notes[5]=(1244.51*0.50);
+            notes[6]=(1567.98*0.50);
+            notes[7]=(1864.66*0.50);
+            
+            notes[8]= (1046.50*1);
+            notes[9]= (1244.51*1);
+            notes[10]=(1567.98*1);
+            notes[11]=(1864.66*1);
+            
+            notes[12]=(1046.50*2);
+            notes[13]=(1244.51*2);
+            notes[14]=(1567.98*2);
+            break;
+        case 3:
+            notes[0]=(1046.50 *0.25);
+            notes[1]=(1244.51*0.25);
+            notes[2]=(1396.91*0.25);
+            notes[3]=(1661.22*0.25);
+            
+            notes[4]=(1046.50*0.55);
+            notes[5]=(1244.51*0.50);
+            notes[6]=(1396.91*0.50);
+            notes[7]=(1661.22*0.50);
+            
+            notes[8]= (1046.50);
+            notes[9]= (1244.51);
+            notes[10]=(1396.91);
+            notes[11]=(1661.22);
+            
+            notes[12]=(1046.50*2);
+            notes[13]=(1244.51*2);
+            notes[14]=(1396.91*2);
+            break;
+        case 4:
+            notes[0]=(932.33 *0.25);
+            notes[1]=(1174.66*0.25);
+            notes[2]=(1396.91*0.25);
+            notes[3]=(1661.22*0.25);
+            
+            notes[4]=(932.33 *0.55);
+            notes[5]=(1174.66*0.50);
+            notes[6]=(1396.91*0.50);
+            notes[7]=(1661.22*0.50);
+            
+            notes[8]= (932.33 );
+            notes[9]= (1174.66);
+            notes[10]=(1396.91);
+            notes[11]=(1661.22);
+            
+            notes[12]=(932.33 *2);
+            notes[13]=(1174.66*2);
+            notes[14]=(1396.91*2);
+            break;
+        case 5:
+            notes[0]=(932.33 *0.25);
+            notes[1]=(1174.66*0.25);
+            notes[2]=(1244.51*0.25);
+            notes[3]=(1567.98*0.25);
+            
+            notes[4]=(932.33 *0.50);
+            notes[5]=(1174.66*0.50);
+            notes[6]=(1244.51*0.50);
+            notes[7]=(1567.98*0.50);
+            
+            notes[8]= (932.33 );
+            notes[9]= (1174.66);
+            notes[10]=(1244.51);
+            notes[11]=(1567.98);
+            
+            notes[12]=(932.33 *2);
+            notes[13]=(1174.66*2);
+            notes[14]=(1244.51*2);
+            break;
+        case 6:
+            notes[0]=(830.61 *0.25);
+            notes[1]=(1046.50*0.25);
+            notes[2]=(1244.51*0.25);
+            notes[3]=(1567.98*0.25);
+            
+            notes[4]=(830.61 *0.50);
+            notes[5]=(1046.50*0.50);
+            notes[6]=(1244.51*0.50);
+            notes[7]=(1567.98*0.50);
+            
+            notes[8]= (830.61 );
+            notes[9]= (1046.50);
+            notes[10]=(1244.51);
+            notes[11]=(1567.98);
+            
+            notes[12]=(830.61*2 );
+            notes[13]=(1046.50*2);
+            notes[14]=(1244.51*2);
+            break;
+        case 7:
+            notes[0]=(1108.73*0.25);
+            notes[1]=(1396.91*0.25);
+            notes[2]=(1567.98*0.25);
+            notes[3]=(1864.66*0.25);
+            
+            notes[4]=(1108.73*0.55);
+            notes[5]=(1396.91*0.50);
+            notes[6]=(1567.98*0.50);
+            notes[7]=(1864.66*0.50);
+            
+            notes[8]= (1108.73*1);
+            notes[9]= (1396.91*1);
+            notes[10]=(1567.98*1);
+            notes[11]=(1864.66*1);
+            
+            notes[12]=(1108.73*2);
+            notes[13]=(1396.91*2);
+            notes[14]=(1567.98*2);
+            break;
+        case 8:
+            notes[0]=(783.99 *0.25);
+            notes[1]=(932.33 *0.25);
+            notes[2]=(1174.66*0.25);
+            notes[3]=(1244.51*0.25);
+            
+            notes[4]=(783.99*0.50);
+            notes[5]=(932.33 *0.50);
+            notes[6]=(1174.66 *0.50);
+            notes[7]=(1244.51*0.50);
+            
+            notes[8]=(783.99);
+            notes[9]=(932.33 );
+            notes[10]=(1174.66 );
+            notes[11]=(1244.51 );
+            
+            notes[12]=(783.99 *2);
+            notes[13]=(932.33 *2);
+            notes[14]=(1174.66*2);
+            break;
+        case 9:
+            notes[0]=(1046.50 *0.25);
+            notes[1]=(1244.51*0.25);
+            notes[2]=(1396.91*0.25);
+            notes[3]=(1760.00*0.25);
+            
+            notes[4]=(1046.50*0.50);
+            notes[5]=(1244.51*0.50);
+            notes[6]=(1396.91*0.50);
+            notes[7]=(1760.00*0.50);
+            
+            notes[8]= (1046.50);
+            notes[9]= (1244.51);
+            notes[10]=(1396.91);
+            notes[11]=(1760.00);
+            
+            notes[12]=(1046.50*2);
+            notes[13]=(1244.51*2);
+            notes[14]=(1396.91*2);
+            break;
+        case 0:
+            notes[0]=(783.99 *0.25);
+            notes[1]=(987.77 *0.25);
+            notes[2]=(1174.66*0.25);
+            notes[3]=(1244.51*0.25);
+            notes[4]=(1396.91*0.25);
+            
+            notes[5]=(783.99 *0.50);
+            notes[6]=(987.77 *0.50);
+            notes[7]=(1174.66*0.50);
+            notes[8]=(1244.51*0.50);
+            notes[9]=(1396.91*0.50);
+            
+            notes[10]=(783.99 );
+            notes[11]=(987.77 );
+            notes[12]=(1174.66);
+            notes[13]=(1244.51);
+            notes[14]=(1396.91);
+            break;
     }
 }
 
@@ -410,12 +750,16 @@ void ofApp::keyPressed(int key){
             for(int i =0; i<balls.size(); i++){
                 (balls[i].getmouse_g() == false) ? balls[i].setmouse_g(true) : balls[i].setmouse_g(false);
             }
+            (_g == false) ? _g = true : _g = false;
             break;
         case 'm':
             (synth_menu.pop_menu == false) ? synth_menu.pop_menu = true : synth_menu.pop_menu = false;
             break;
         case 'h':
             (help_menu.pop_menu == false) ? help_menu.pop_menu = true : help_menu.pop_menu = false;
+            break;
+        case 's':
+            (stats_menu.pop_menu == false) ? stats_menu.pop_menu = true : stats_menu.pop_menu = false;
             break;
         case ' ':
             (pause == false) ? pause = true : pause = false;
@@ -427,6 +771,47 @@ void ofApp::keyPressed(int key){
             break;
         case 'w':
             close_walls();
+            (_walls == false) ? _walls = true : _walls = false;
+            break;
+        case '1':
+            setNotes(1);
+            note_sel = 1;
+            break;
+        case '2':
+            setNotes(2);
+            note_sel = 2;
+            break;
+        case '3':
+            setNotes(3);
+            note_sel = 3;
+            break;
+        case '4':
+            setNotes(4);
+            note_sel = 4;
+            break;
+        case '5':
+            setNotes(5);
+            note_sel = 5;
+            break;
+        case '6':
+            setNotes(6);
+            note_sel = 6;
+            break;
+        case '7':
+            setNotes(7);
+            note_sel = 7;
+            break;
+        case '8':
+            setNotes(8);
+            note_sel = 8;
+            break;
+        case '9':
+            setNotes(9);
+            note_sel = 9;
+            break;
+        case '0':
+            setNotes(0);
+            note_sel = 0;
             break;
     }
 }
@@ -470,6 +855,9 @@ void ofApp::mouseDragged(int x, int y, int button){
     } else if(help_menu.pop_menu and help_menu.dragged){
         help_menu.menu_x = ofGetMouseX()-help_menu.drag_distx;
         help_menu.menu_y = ofGetMouseY()-help_menu.drag_disty;
+    } else if(stats_menu.pop_menu and stats_menu.dragged){
+        stats_menu.menu_x = ofGetMouseX()-stats_menu.drag_distx;
+        stats_menu.menu_y = ofGetMouseY()-stats_menu.drag_disty;
     }
 }
 
@@ -483,13 +871,19 @@ void ofApp::mousePressed(int x, int y, int button){
         help_menu.drag_distx = ofGetMouseX()-help_menu.menu_x;
         help_menu.drag_disty = ofGetMouseY()-help_menu.menu_y;
         help_menu.dragged = true;
+    } else if(stats_menu.pop_menu and x>stats_menu.menu_x and x<stats_menu.menu_x+stats_menu.menu_width and y>stats_menu.menu_y and y<stats_menu.menu_y+25){
+        stats_menu.drag_distx = ofGetMouseX()-stats_menu.menu_x;
+        stats_menu.drag_disty = ofGetMouseY()-stats_menu.menu_y;
+        stats_menu.dragged = true;
     }
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
     synth_menu.dragged = false;
     help_menu.dragged = false;
+    stats_menu.dragged = false;
 }
 
 //--------------------------------------------------------------

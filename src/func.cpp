@@ -1,3 +1,10 @@
+//
+//  func.cpp
+//  sound_demo
+//
+//  Created by Diogo Miguez on 27/06/2021.
+//
+
 #include "func.hpp"
 #include "ofMath.h"
 

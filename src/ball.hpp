@@ -1,3 +1,10 @@
+//
+//  ball.hpp
+//  sound_demo
+//
+//  Created by Diogo Miguez on 27/06/2021.
+//
+
 #ifndef ball_hpp
 #define ball_hpp
 
@@ -15,7 +22,7 @@ class Ball : public ofBaseApp{
         int radius;
         ofColor color;
     // constantes físicas
-        double g = 5000;
+        double g = 10000;
         double a = 1000;
     // parametros da simulação
         int SAMPLE_RATE = 100;
@@ -50,6 +57,8 @@ class Ball : public ofBaseApp{
         bool hit_note = false;
         void setmouse_g(bool act) {mouse_g = act;};
         bool getmouse_g() {return mouse_g;};
+        bool get_closed_floor() {return closed_floor;};
+        bool get_closed_walls() {return closed_walls;};
         int nnotes = 7; // numero de notas possíveis
         ofxMaxiOsc Osc_sine;
         ofxMaxiOsc Osc_quad;

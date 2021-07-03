@@ -1,3 +1,10 @@
+//
+//  ball.cpp
+//  sound_demo
+//
+//  Created by Diogo Miguez on 27/06/2021.
+//
+
 #include "ball.hpp"
 
 
@@ -68,21 +75,22 @@ const ofColor Ball::get_color(){
 
 //--------------------------------------------------------------
 void Ball::evolve(){
+    
     //PEGAR NA BOLA
     if (ofGetMousePressed() and (distance(posx, posy, ofGetMouseX(), ofGetMouseY()) < radius or caught))
     {
         double aux_x = posx;
         double aux_y = posy;
-        
+
         posx = ofGetMouseX();
         posy = ofGetMouseY();
-        
+
         v_x= (posx-aux_x)/dt;
         v_y= (posy-aux_y)/dt;
-        
+
         caught = true;
     } else {
-      
+
         caught = false;
         hit_note = false;
 
@@ -90,20 +98,20 @@ void Ball::evolve(){
         double aux_y = posy;
 
         int gravity = (mouse_g==true)? 1 : 0 ;
-            
-        posx += dt*v_x + gravity*dt*dt*a*(ofGetMouseX()-posx)/(0.01+abs(pow(ofGetMouseX()-posx,1)));
-        posy += dt*v_y + dt*dt*(g+gravity*(ofGetMouseY()-posy)*a/(0.01+abs(pow(ofGetMouseY()-posy,1))));
+
+        posx += dt*v_x + gravity*dt*dt*a*(ofGetMouseX()-posx)/(0.01+abs(pow(ofGetMouseX()-posx,1)))/2.0;
+        posy += dt*v_y + dt*dt*(g+gravity*(ofGetMouseY()-posy)*a/(0.01+abs(pow(ofGetMouseY()-posy,1))))/2.0;
 
         v_x= (posx-aux_x)/dt;
         v_y= (posy-aux_y)/dt;
-        
+
         if(posy >ofGetHeight()-radius-15 && closed_floor ){
                 hit_note = true;
                 posy = ofGetHeight()-radius-15;
-                set_v_y(-get_v_y());
-                //note = notes[(int)(posx*nnotes/ofGetWidth())];
+                set_v_y(-v_y);
                 note = (int)(posx*nnotes/ofGetWidth());
             }
+
         // CONDIÇÕES FRONTEIRA
         if(posx > ofGetWidth()){
             if(closed_walls) {
@@ -121,7 +129,7 @@ void Ball::evolve(){
         }
     }
     double energy = 0.5*(v_x*v_x+v_y*v_y) + g*(ofGetHeight()-15-posy);
-    cout << "energy = " << energy << endl;
+    //cout << "energy = " << energy << endl;
     
 }
 

@@ -1,3 +1,10 @@
+/*
+ Project Title:
+ Description:
+ Author: Diogo Miguez
+ 2021
+*/
+
 #include "ofMain.h"
 #include "menu.hpp"
 #include "ball.hpp"
@@ -28,6 +35,8 @@ class ofApp : public ofBaseApp{
         void floor(bool);
         bool pause;
         bool _floor = true;
+        bool _walls = true;
+        bool _g = false;
         void close_walls();
     //audio
         void audioOut(ofSoundBuffer& );
@@ -37,24 +46,27 @@ class ofApp : public ofBaseApp{
         double decay;
         double volume = 0.5;
         vector<double> notes;
+        int note_sel = 1;  
+        void setNotes(int);
         double Filterfreq;
         double Resonance;
     
         ofxMaxiFilter myFilter;
         bool* wvforms = new bool[3]; // SINE - SQUARE - TRIANGLE
-    
+        
         ofSoundStream soundstream;
-        //int nnotes = 7; // numero de notas
-       // double notes[7] = {349.23,392.00,415.30,493.88,523.25,600,700};
+        
     //MENUS
         menu synth_menu ;
         menu help_menu ;
+        menu stats_menu ; // Nballs, escala, gravidade, walls, floor
 
     // ANIMATIONS
         bool animate = false;
         int animate_count = 0;
         int synth_menu_count = 0;
         int help_menu_count = 0;
+        int stats_menu_count = 0;
         int animate_cycles = 6;
 };
 
