@@ -4,14 +4,13 @@
 void ofApp::setup(){
     
     ofSetBackgroundAuto(false);
-    
-    attack = 150;
-    decay = 200;
-    
-    ofSoundStreamSetup(2, 0); // 2 output channels (stereo), 0 input channels
     ofSetCircleResolution(100);
     
-    ofSetBackgroundAuto(false);
+    // AUDIO DRIVER---------------------------------------
+    ofSoundStreamListDevices(); //--> PRINT O DEVICE QUE A GENTE QUER USAR PARA O OUTPUT. DEFAULTS TO AS COLUnAS DO Pêssê
+    //soundstream.setDeviceID(2); //-->BLACKHOLE
+    soundstream.setup(this, 2, 0, 44100, 512, 4); // 2 output channels (stereo), 0 input channels
+    
     
     // NOTAS ---------------------------------------------
     

@@ -1,10 +1,3 @@
-/*
- Project Title:
- Description:
- Author: Diogo Miguez
- 2021
-*/
-
 #include "ofMain.h"
 #include "menu.hpp"
 #include "ball.hpp"
@@ -49,7 +42,8 @@ class ofApp : public ofBaseApp{
     
         ofxMaxiFilter myFilter;
         bool* wvforms = new bool[3]; // SINE - SQUARE - TRIANGLE
-        
+    
+        ofSoundStream soundstream;
         //int nnotes = 7; // numero de notas
        // double notes[7] = {349.23,392.00,415.30,493.88,523.25,600,700};
     //MENUS
