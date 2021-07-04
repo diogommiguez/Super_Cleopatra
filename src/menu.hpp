@@ -1,10 +1,3 @@
-//
-//  menu.hpp
-//  sound_demo
-//
-//  Created by Diogo Miguez on 27/06/2021.
-//
-
 #ifndef menu_hpp
 #define menu_hpp
 

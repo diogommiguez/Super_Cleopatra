@@ -1,10 +1,3 @@
-/*
- Project Title:
- Description:
- Author: Diogo Miguez
- 2021
-*/
-
 #include "ofMain.h"
 #include "menu.hpp"
 #include "ball.hpp"
