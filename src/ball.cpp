@@ -90,7 +90,7 @@ void Ball::evolve(){
 
         caught = true;
     } else {
-
+        
         caught = false;
         hit_note = false;
 

@@ -5,7 +5,10 @@ void ofApp::setup(){
     
     ofSetBackgroundAuto(false);
     ofSetCircleResolution(100);
-
+    font.load("digital-7 (mono).ttf", 11);
+    font_help_menu.load("digital-7 (mono).ttf", 13);
+    font_bold.load("digital-7 (mono).ttf", 15);
+    
     attack = 150;
     decay = 200;
     
@@ -220,19 +223,19 @@ void ofApp::draw(){
         color.setHsb(0, 0, 0,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
         ofSetColor(color);
         
-        ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
-        ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
-        ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-10,synth_menu.menu_height/8.0-5);
-        ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-15,synth_menu.menu_height/8.0-5);
+        font_bold.drawString("OSC", 1*synth_menu.menu_width/16.0+14,synth_menu.menu_height/8.0-5);
+        font_bold.drawString("AMP", 5*synth_menu.menu_width/16.0+14,synth_menu.menu_height/8.0-5);
+        font_bold.drawString("FILT", 9*synth_menu.menu_width/16.0-2,synth_menu.menu_height/8.0-5);
+        font_bold.drawString("FX", 13*synth_menu.menu_width/16.0+5,synth_menu.menu_height/8.0-5);
         
         // BOLD LOL
-        ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
-        ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
-        ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
-        ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-14,synth_menu.menu_height/8.0-5);
+        //ofDrawBitmapString("OSCILLATOR", 1*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+        //ofDrawBitmapString("AMPLIFIER", 5*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+        //ofDrawBitmapString("FILTER", 9*synth_menu.menu_width/16.0-9,synth_menu.menu_height/8.0-5);
+        //ofDrawBitmapString("EFFECTS", 13*synth_menu.menu_width/16.0-14,synth_menu.menu_height/8.0-5);
         
-        ofDrawBitmapString("REVERB",11*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-28);
-        ofDrawBitmapString("DELAY",13*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-28);
+        font_help_menu.drawString("REVERB",11*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-28);
+        font_help_menu.drawString("DELAY",13*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-28);
         
         ofDrawCircle(0*synth_menu.menu_width/16.0+30,synth_menu.menu_height/3.-20, 10);
         ofDrawRectangle(1*synth_menu.menu_width/16.0+20,synth_menu.menu_height/3.-30, 20,20);
@@ -244,17 +247,17 @@ void ofApp::draw(){
         color.setHsb(170, 255, 255,ofMap(synth_menu_count, 0, animate_cycles, 0, 255));
         ofSetColor(color);
         
-        ofDrawBitmapString("ATT", 4*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-        ofDrawBitmapString("DEC", 5*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-        ofDrawBitmapString("VOL", 6*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        font.drawString("ATT", 4*synth_menu.menu_width/16.0+16,synth_menu.menu_height/3.-20);
+        font.drawString("DEC", 5*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        font.drawString("VOL", 6*synth_menu.menu_width/16.0+20,synth_menu.menu_height/3.-20);
         
-        ofDrawBitmapString("FIL",8*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
-        ofDrawBitmapString("RES",9*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-20);
+        font.drawString("FILT",8*synth_menu.menu_width/16.0+16,synth_menu.menu_height/3.-20);
+        font.drawString("RES",9*synth_menu.menu_width/16.0+20,synth_menu.menu_height/3.-20);
         
-        ofDrawBitmapString("TIME",11*synth_menu.menu_width/16.0+8,synth_menu.menu_height/3.-10);
-        ofDrawBitmapString("FBK",12*synth_menu.menu_width/16.0+13,synth_menu.menu_height/3.-10);
-        ofDrawBitmapString("SIZE",13*synth_menu.menu_width/16.0+18,synth_menu.menu_height/3.-10);
-        ofDrawBitmapString("FBK",14*synth_menu.menu_width/16.0+23,synth_menu.menu_height/3.-10);
+        font.drawString("TIME",11*synth_menu.menu_width/16.0+8,synth_menu.menu_height/3.-10);
+        font.drawString("FBK",12*synth_menu.menu_width/16.0+15,synth_menu.menu_height/3.-10);
+        font.drawString("SIZE",13*synth_menu.menu_width/16.0+19,synth_menu.menu_height/3.-10);
+        font.drawString("FBK",14*synth_menu.menu_width/16.0+25,synth_menu.menu_height/3.-10);
        
         // ---------------------------------------------------------------
         ofTranslate(-synth_menu.menu_x, -synth_menu.menu_y); // END OF TRANSLATE
@@ -286,8 +289,7 @@ void ofApp::draw(){
         
         color.setHsb(200,255,255,ofMap(help_menu_count, 0, animate_cycles, 0, 210));
         ofSetColor(color);
-        ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-60, 15);
-        ofDrawBitmapString("SUPER CLEOPATRA", help_menu.menu_width/2.0-59, 15);
+        font_bold.drawString("SUPER CLEOPATRA", help_menu.menu_width/2.0-60, 18);
         
         color.setHsb(0,0,150,ofMap(help_menu_count, 0, animate_cycles, 0, 255));
         ofSetColor(color);
@@ -303,36 +305,51 @@ void ofApp::draw(){
         color.setHsb(0,0,0,ofMap(help_menu_count, 0, animate_cycles, 0, 150));
         ofSetColor(color);
 
-        ofDrawBitmapString("b - place ball", 10,45);
-        ofDrawBitmapString("b", 11,45);
+        font.drawString("  - place ball", 10,48);
+        font_help_menu.drawString("b", 11,48);
+        font_help_menu.drawString("b", 10,48);
+
+        font.drawString("         - change notes", 10,75);
+        font_help_menu.drawString("Numbers", 11,75);
+        font_help_menu.drawString("Numbers", 10,75);
+
         
-        ofDrawBitmapString("Numbers - change\n           scale", 10,70);
-        ofDrawBitmapString("Numbers", 11,70);
+        font.drawString("  - random velocities", 10,102);
+        font_help_menu.drawString("v", 11,102);
+        font_help_menu.drawString("v", 10,102);
         
-        ofDrawBitmapString("v - random\n    velocities", 10,95);
-        ofDrawBitmapString("v", 11,95);
+        font.drawString("  - open/close walls", help_menu.menu_width/2.0+2.5+10,48);
+        font_help_menu.drawString("w",  help_menu.menu_width/2.0+2.5+11,48);
+        font_help_menu.drawString("w",  help_menu.menu_width/2.0+2.5+10,48);
         
-        ofDrawBitmapString("w - [de]activate\n    walls", help_menu.menu_width/2.0+2.5+10,45);
-        ofDrawBitmapString("w",  help_menu.menu_width/2.0+2.5+11,45);
+        font.drawString("  - open/close floor", help_menu.menu_width/2.0+2.5+10,75);
+        font_help_menu.drawString("o",  help_menu.menu_width/2.0+2.5+11,75);
+        font_help_menu.drawString("o",  help_menu.menu_width/2.0+2.5+10,75);
         
-        ofDrawBitmapString("o - [de]activate\n    floor", help_menu.menu_width/2.0+2.5+10,75);
-        ofDrawBitmapString("o",  help_menu.menu_width/2.0+2.5+11,75);
+        font.drawString("  - activate force", help_menu.menu_width/2.0+2.5+10,102);
+        font_help_menu.drawString("g",  help_menu.menu_width/2.0+2.5+11,102);
+        font_help_menu.drawString("g",  help_menu.menu_width/2.0+2.5+10,102);
         
-        ofDrawBitmapString("g - ativate force", help_menu.menu_width/2.0+2.5+10,105);
-        ofDrawBitmapString("g",  help_menu.menu_width/2.0+2.5+11,105);
-        
-        ofDrawBitmapString("SPACEBAR - pause", 10,142);
-        ofDrawBitmapString("SPACEBAR", 11,142);
-        // agora!
-        ofDrawBitmapString("q - quit", 10,137+25);
-        ofDrawBitmapString("q", 11,137+25);
-        
-        ofDrawBitmapString("m - open/close\n    synth menu",help_menu.menu_width/2.0+2.5+10,137);
-        ofDrawBitmapString("m", help_menu.menu_width/2.0+2.5+11,137);
-        
-        ofDrawBitmapString("h - open/close\n    this menu", help_menu.menu_width/2.0+2.5+10,137+25);
-        ofDrawBitmapString("h",  help_menu.menu_width/2.0+2.5+11,137+25);
-        
+        font.drawString("          - pause", help_menu.menu_width/2.0+2.5+10,142);
+        font_help_menu.drawString("SPACEBAR", help_menu.menu_width/2.0+2.5+11,142);
+        font_help_menu.drawString("SPACEBAR", help_menu.menu_width/2.0+2.5+10,142);
+
+        font.drawString("  - quit", help_menu.menu_width/2.0+2.5+10,137+25);
+        font_help_menu.drawString("q", help_menu.menu_width/2.0+2.5+11,137+25);
+        font_help_menu.drawString("q", help_menu.menu_width/2.0+2.5+10,137+25);
+
+        font.drawString("  - pop synth menu",10,135);
+        font_help_menu.drawString("m", 11,135);
+        font_help_menu.drawString("m", 10,135);
+
+        font.drawString("  - pop this menu", 10,137+15);
+        font_help_menu.drawString("h",  11,137+15);
+        font_help_menu.drawString("h",  10,137+15);
+
+        font.drawString("  - pop stats menu", 10,137+32);
+        font_help_menu.drawString("s",  11,137+32);
+        font_help_menu.drawString("s",  10,137+32);
+
         ofTranslate(-help_menu.menu_x, -help_menu.menu_y);
     }
     
@@ -353,8 +370,7 @@ void ofApp::draw(){
         
         color.setHsb(200,255,255,ofMap(stats_menu_count, 0, animate_cycles, 0, 210));
         ofSetColor(color);
-        ofDrawBitmapString("STATS", stats_menu.menu_width/2.0-20, 15);
-        ofDrawBitmapString("STATS", stats_menu.menu_width/2.0-21, 15);
+        font_bold.drawString("STATS", stats_menu.menu_width/2.0-22, 17);
         
         color.setHsb(0,0,150,ofMap(stats_menu_count, 0, animate_cycles, 0, 255));
         ofSetColor(color);
@@ -363,81 +379,76 @@ void ofApp::draw(){
         color.setHsb(0,0,0,ofMap(stats_menu_count, 0, animate_cycles, 0, 150));
         ofSetColor(color);
 
-        ofDrawBitmapString("Nballs", 10,45);
-        ofDrawBitmapString("Nballs", 11,45);
+        font_help_menu.drawString("Nballs", 7,45);
+        font_help_menu.drawString("Nballs", 8,45);
         
         string nballs = to_string(balls.size());
         
-        ofDrawBitmapString(nballs, 80,45);
-        ofDrawBitmapString(nballs, 80,45);
+        font_help_menu.drawString(nballs, 80,45);
         
         if(_g) {
-        ofDrawBitmapString("Force   ON", 10,65);
-        ofDrawBitmapString("Force   ON", 11,65);
+            font_help_menu.drawString("Force", 7,67);
+            font_help_menu.drawString("Force", 8,67);
+            font_help_menu.drawString("ON", 75,67);
         } else {
-            ofDrawBitmapString("Force  OFF", 10,65);
-            ofDrawBitmapString("Force  OFF", 11,65);
+            font_help_menu.drawString("Force ", 7,67);
+            font_help_menu.drawString("Force ", 8,67);
+            font_help_menu.drawString("OFF", 71,67);
         }
         
         if(_floor){
-        ofDrawBitmapString("Floor   ON", 10,85);
-        ofDrawBitmapString("Floor   ON", 11,85);
+            font_help_menu.drawString("Floor  ", 7,89);
+            font_help_menu.drawString("Floor  ", 8,89);
+            font_help_menu.drawString("ON", 75,89);
         } else {
-            ofDrawBitmapString("Floor  OFF", 10,85);
-            ofDrawBitmapString("Floor  OFF", 11,85);
+            font_help_menu.drawString("Floor   ", 7,89);
+            font_help_menu.drawString("Floor  ", 8,89);
+            font_help_menu.drawString("OFF", 71,89);
         }
         
         if(_walls){
-        ofDrawBitmapString("Walls   ON", 10,105);
-        ofDrawBitmapString("Walls   ON", 11,105);
+            font_help_menu.drawString("Walls   ", 7,111);
+            font_help_menu.drawString("Walls   ", 8,111);
+            font_help_menu.drawString("ON", 75,111);
         } else {
-            ofDrawBitmapString("Walls  OFF", 10,105);
-            ofDrawBitmapString("Walls  OFF", 11,105);
+            font_help_menu.drawString("Walls  ", 7,111);
+            font_help_menu.drawString("Walls  ", 8,111);
+            font_help_menu.drawString("OFF", 71,111);
         }
         
-        ofDrawBitmapString("Notes ", 10,125);
-        ofDrawBitmapString("Notes ", 11,125);
+        font_help_menu.drawString("Notes  ", 7,133);
+        font_help_menu.drawString("Notes  ", 8,133);
         
         switch(note_sel) {
             case 1:
-                ofDrawBitmapString("PENTA ", 56,125);
-                ofDrawBitmapString("PENTA ", 57,125);
+                font_help_menu.drawString("PENTA ", 57,133);
                 break;
             case 2:
-                ofDrawBitmapString("Cm7 ", 70,125);
-                ofDrawBitmapString("Cm7 ", 71,125);
+                 font_help_menu.drawString("Cm7 ", 70,133);
                 break;
             case 3:
-                ofDrawBitmapString("Fm7 ", 70,125);
-                ofDrawBitmapString("Fm7 ", 71,125);
+                 font_help_menu.drawString("Fm7 ", 70,133);
                 break;
             case 4:
-                ofDrawBitmapString("Bb7 ", 70,125);
-                ofDrawBitmapString("Bb7 ", 71,125);
+                 font_help_menu.drawString("Bb7 ", 70,133);
                 break;
             case 5:
-                ofDrawBitmapString("EbM7 ", 66,125);
-                ofDrawBitmapString("EbM7 ", 67,125);
+                 font_help_menu.drawString("EbM7 ", 66,133);
                 break;
             case 6:
-                ofDrawBitmapString("AbM7 ", 66,125);
-                ofDrawBitmapString("AbM7 ", 67,125);
+                 font_help_menu.drawString("AbM7 ", 66,133);
                 break;
             case 7:
-                ofDrawBitmapString("DbM7 ", 66,125);
-                ofDrawBitmapString("DbM7 ", 67,125);
+                 font_help_menu.drawString("DbM7 ", 66,133);
                 break;
             case 8:
-                ofDrawBitmapString("Gm7 ", 70,125);
-                ofDrawBitmapString("Gm7 ", 71,125);
+                 font_help_menu.drawString("Gm7 ", 70,133);
                 break;
             case 9:
-                ofDrawBitmapString("F ", 75,125);
-                ofDrawBitmapString("F ", 76 ,125);
+                 font_help_menu.drawString("F ", 75,133);
                 break;
             case 0:
-                ofDrawBitmapString("G7b6 ", 66,125);
-                ofDrawBitmapString("G7b6 ", 67,125);
+                 font_help_menu.drawString("G7b6 ", 66,133);
                 break;
         }
         

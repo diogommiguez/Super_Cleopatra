@@ -28,6 +28,10 @@ class ofApp : public ofBaseApp{
         void windowResized(int w, int h);
         void dragEvent(ofDragInfo dragInfo);
         void gotMessage(ofMessage msg);
+    
+        ofTrueTypeFont font;
+        ofTrueTypeFont font_bold;
+        ofTrueTypeFont font_help_menu;
     //balls
         void newBall(int, int);
         void random_v();
